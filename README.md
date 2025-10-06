@@ -242,7 +242,7 @@ The project includes:
 - `.railwayignore` - Files to exclude from deployment
 - `.dockerignore` - Files to exclude from Docker build
 - Updated `vite.config.js` - Optimized for production
-- Updated `package.json` - Added stable Rollup dependency, downgraded Vite for compatibility
+- Updated `package.json` - Added serve for static hosting, fixed production deployment
 
 ### Live Demo
 

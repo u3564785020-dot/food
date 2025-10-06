@@ -16,11 +16,11 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Remove dev dependencies and clean cache
+# Remove dev dependencies but keep serve
 RUN npm prune --production && npm cache clean --force
 
 # Expose port (Railway will set PORT environment variable)
 EXPOSE $PORT
 
-# Start the application
+# Start the application with serve
 CMD ["npm", "run", "start"]
