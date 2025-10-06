@@ -1,0 +1,40 @@
+.app {
+  min-height: 100vh;
+  background-color: var(--color-egg);
+  margin: 0;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 80px;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.app.checkout-page {
+  padding-top: 0;
+}
+
+@media (max-width: 768px) {
+  .app {
+    padding-top: 0;
+    padding-bottom: 80px;
+  }
+  
+  .app.checkout-page {
+    padding-top: 0;
+    padding-bottom: 80px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .app {
+    padding-top: 80px;
+    padding-bottom: 0;
+  }
+  
+  .app.checkout-page {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+

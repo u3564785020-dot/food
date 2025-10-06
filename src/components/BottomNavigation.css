@@ -1,0 +1,123 @@
+.bottom-navigation {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--color-egg);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 8px 0;
+  z-index: 1000;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Hide bottom navigation on checkout page */
+body:has(.checkout-page) .bottom-navigation {
+  display: none !important;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: all 0.2s ease;
+  min-width: 60px;
+}
+
+.nav-item:hover {
+  transform: translateY(-1px);
+}
+
+.nav-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+  transition: all 0.2s ease;
+}
+
+.nav-item.active .nav-icon {
+  transform: scale(1.1);
+}
+
+.nav-label {
+  font-size: 10px;
+  font-weight: 500;
+  text-align: center;
+  transition: all 0.2s ease;
+  line-height: 1.2;
+}
+
+/* Active state */
+.nav-item.active {
+  color: var(--color-red);
+}
+
+.nav-item.active .nav-icon {
+  color: var(--color-red);
+}
+
+.nav-item.active .nav-label {
+  color: var(--color-red);
+  font-weight: 600;
+}
+
+/* Inactive state */
+.nav-item:not(.active) {
+  color: var(--color-brown);
+}
+
+.nav-item:not(.active) .nav-icon {
+  color: var(--color-brown);
+}
+
+.nav-item:not(.active) .nav-label {
+  color: var(--color-brown);
+}
+
+/* Hide on desktop */
+@media (min-width: 1024px) {
+  .bottom-navigation {
+    display: none;
+  }
+}
+
+/* Mobile specific adjustments */
+@media (max-width: 768px) {
+  .bottom-navigation {
+    padding: 6px 0;
+  }
+  
+  .nav-item {
+    min-width: 50px;
+    padding: 2px 4px;
+  }
+  
+  .nav-label {
+    font-size: 9px;
+  }
+  
+  .nav-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 480px) {
+  .nav-label {
+    font-size: 8px;
+  }
+  
+  .nav-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+}

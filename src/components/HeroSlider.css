@@ -1,0 +1,137 @@
+.hero-slider {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  margin-top: 0;
+}
+
+.slider-container {
+  overflow: hidden;
+  width: 100%;
+}
+
+.slider-track {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.slide {
+  min-width: 100%;
+  flex-shrink: 0;
+}
+
+.slide img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+.slider-controls {
+  display: none;
+}
+
+.slider-dots {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+  padding: 0;
+}
+
+.dot.active {
+  background-color: var(--color-white);
+  width: 24px;
+  border-radius: 4px;
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+  .slide img {
+    height: 200px;
+    object-fit: cover;
+    object-position: center;
+  }
+  
+  .slider-dots {
+    bottom: 10px;
+  }
+  
+  .dot {
+    width: 6px;
+    height: 6px;
+  }
+  
+  .dot.active {
+    width: 20px;
+  }
+}
+
+/* Tablet optimization */
+@media (min-width: 769px) and (max-width: 1023px) {
+  .slide img {
+    height: 300px;
+    object-fit: cover;
+    object-position: center;
+  }
+}
+
+/* Desktop optimization */
+@media (min-width: 1024px) {
+  .slide img {
+    height: 400px;
+    object-fit: cover;
+    object-position: center;
+  }
+  
+  .hero-slider {
+    margin-top: 80px;
+  }
+  
+  .slider-controls {
+    display: block;
+  }
+  
+  .slider-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 10;
+    padding: 10px;
+    transition: opacity 0.2s;
+  }
+  
+  .slider-arrow:hover {
+    opacity: 0.7;
+  }
+  
+  .slider-arrow.prev {
+    left: 20px;
+  }
+  
+  .slider-arrow.next {
+    right: 20px;
+  }
+  
+  .slider-arrow img {
+    height: 60px;
+  }
+}
+
+
