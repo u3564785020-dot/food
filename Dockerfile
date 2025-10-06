@@ -1,5 +1,5 @@
-# Use Node.js 18 Alpine for smaller image size
-FROM node:18-alpine
+# Use standard Node.js 18 image (not Alpine) for better compatibility
+FROM node:18-slim
 
 # Set working directory
 WORKDIR /app
@@ -16,8 +16,8 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Install only production dependencies
-RUN npm ci --only=production && npm cache clean --force
+# Remove dev dependencies and clean cache
+RUN npm prune --production && npm cache clean --force
 
 # Expose port (Railway will set PORT environment variable)
 EXPOSE $PORT
