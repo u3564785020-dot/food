@@ -214,6 +214,37 @@ npm run preview
 Этот проект создан исключительно в образовательных целях.
 Все права на бренд Burger King принадлежат MINOR INTERNATIONAL PCL.
 
+## 🚀 Deployment on Railway
+
+This project is configured for easy deployment on [Railway](https://railway.com/):
+
+### Automatic Deployment
+
+1. **Connect GitHub**: Link your GitHub repository to Railway
+2. **Auto Deploy**: Railway will automatically detect the project and deploy
+3. **Environment**: No additional configuration needed
+
+### Manual Deployment Commands
+
+```bash
+# Build the project
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+### Railway Configuration
+
+The project includes:
+- `railway.json` - Railway deployment configuration
+- `.railwayignore` - Files to exclude from deployment
+- Updated `vite.config.js` - Optimized for production
+
+### Live Demo
+
+Visit the live demo: [Your Railway URL will appear here after deployment]
+
 ---
 
 **Сделано с ❤️ с использованием React**
