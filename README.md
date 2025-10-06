@@ -237,9 +237,12 @@ npm run preview
 ### Railway Configuration
 
 The project includes:
-- `railway.json` - Railway deployment configuration
+- `railway.json` - Railway deployment configuration (uses Dockerfile)
+- `Dockerfile` - Docker configuration for Railway deployment
 - `.railwayignore` - Files to exclude from deployment
+- `.dockerignore` - Files to exclude from Docker build
 - Updated `vite.config.js` - Optimized for production
+- Updated `package.json` - Fixed Rollup dependencies and added start script
 
 ### Live Demo
 
