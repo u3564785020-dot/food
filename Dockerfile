@@ -1,4 +1,4 @@
-# Use standard Node.js 18 image (not Alpine) for better compatibility
+# Use standard Node.js 18 image for better compatibility
 FROM node:18-slim
 
 # Set working directory
@@ -7,8 +7,8 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install all dependencies (including dev dependencies for build)
-RUN npm install
+# Install dependencies with legacy peer deps to avoid conflicts
+RUN npm install --legacy-peer-deps
 
 # Copy source code
 COPY . .
