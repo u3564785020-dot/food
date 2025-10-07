@@ -23,7 +23,9 @@ const ProductPage = ({ onAddToCart }) => {
   }
 
   const discount = generateDiscount(product?.price || 0)
-  const [selectedMeat, setSelectedMeat] = useState(product?.icons?.[0] || 'pork')
+  const [selectedMeat, setSelectedMeat] = useState(
+    product?.icons && product.icons.length > 0 ? product.icons[0] : 'pork'
+  )
   const [quantity, setQuantity] = useState(1)
 
   if (!product) {
@@ -76,10 +78,12 @@ const ProductPage = ({ onAddToCart }) => {
         <div className="product-layout">
           {/* Left Panel - Product Information */}
           <div className="product-image-section">
-            {/* Promotional Badge */}
-            <div className="promotional-badge">
-              {language === 'th' ? '1ฟรี1' : '1 Free 1'}
-            </div>
+            {/* Promotional Badge - только для товаров со скидками */}
+            {product.categoryId === 28255 && (
+              <div className="promotional-badge">
+                {language === 'th' ? '1ฟรี1' : '1 Free 1'}
+              </div>
+            )}
             
             {/* Product Image */}
             <img src={product.image} alt={productName} className="product-main-image" />
@@ -101,36 +105,38 @@ const ProductPage = ({ onAddToCart }) => {
 
           {/* Right Panel - Ordering Options */}
           <div className="product-details-section">
-            {/* Choose Section */}
-            <div className="choose-section">
-              <h3 className="section-title">{language === 'th' ? 'Choose' : 'Choose'}</h3>
-              
-              {/* Meat Type Selector */}
-              <div className="meat-selector">
-                <div className="meat-option">
-                  <img 
-                    src={getIconImage(selectedMeat)} 
-                    alt={selectedMeat}
-                    className="meat-icon"
-                  />
-                  <span className="meat-name">{getMeatName(selectedMeat)}</span>
-                  <span className="checkmark">✓</span>
+            {/* Choose Section - только если есть варианты мяса */}
+            {product.icons && product.icons.length > 0 && (
+              <div className="choose-section">
+                <h3 className="section-title">{language === 'th' ? 'Choose' : 'Choose'}</h3>
+                
+                {/* Meat Type Selector */}
+                <div className="meat-selector">
+                  <div className="meat-option">
+                    <img 
+                      src={getIconImage(selectedMeat)} 
+                      alt={selectedMeat}
+                      className="meat-icon"
+                    />
+                    <span className="meat-name">{getMeatName(selectedMeat)}</span>
+                    <span className="checkmark">✓</span>
+                  </div>
+                </div>
+                
+                {/* Meat Type Buttons */}
+                <div className="meat-buttons">
+                  {product.icons.map((meatType, index) => (
+                    <button
+                      key={index}
+                      className={`meat-button ${selectedMeat === meatType ? 'active' : ''}`}
+                      onClick={() => setSelectedMeat(meatType)}
+                    >
+                      {getMeatName(meatType)}
+                    </button>
+                  ))}
                 </div>
               </div>
-              
-              {/* Meat Type Buttons */}
-              <div className="meat-buttons">
-                {product.icons.map((meatType, index) => (
-                  <button
-                    key={index}
-                    className={`meat-button ${selectedMeat === meatType ? 'active' : ''}`}
-                    onClick={() => setSelectedMeat(meatType)}
-                  >
-                    {getMeatName(meatType)}
-                  </button>
-                ))}
-              </div>
-            </div>
+            )}
 
             {/* Add on Section */}
             <div className="addon-section">
