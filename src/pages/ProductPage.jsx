@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { getProductById } from '../data/products'
 import { useLanguage } from '../context/LanguageContext'
@@ -10,26 +10,35 @@ const ProductPage = ({ onAddToCart }) => {
   const { language } = useLanguage()
   const product = getProductById(id)
 
-  // Генерируем случайную скидку от 10% до 35%
-  const generateDiscount = (originalPrice) => {
+  // Отладочная информация
+  console.log('ProductPage render:', { id, product })
+
+  // Генерируем случайную скидку от 10% до 35% только один раз
+  const discount = useMemo(() => {
+    if (!product?.price) return { originalPrice: 0, newPrice: 0, discountPercent: 0 }
+    
     const discountPercent = Math.floor(Math.random() * 26) + 10; // 10-35%
-    const discountAmount = Math.floor(originalPrice * discountPercent / 100);
-    const newPrice = originalPrice - discountAmount;
+    const discountAmount = Math.floor(product.price * discountPercent / 100);
+    const newPrice = product.price - discountAmount;
     return {
-      originalPrice,
+      originalPrice: product.price,
       newPrice,
       discountPercent
     };
-  }
-
-  const discount = generateDiscount(product?.price || 0)
+  }, [product?.price])
   const [selectedMeat, setSelectedMeat] = useState(
     product?.icons && product.icons.length > 0 ? product.icons[0] : 'pork'
   )
   const [quantity, setQuantity] = useState(1)
 
   if (!product) {
-    return <div className="product-page-error">Product not found</div>
+    return (
+      <div className="product-page-error">
+        <h1>Product not found</h1>
+        <p>Product ID: {id}</p>
+        <button onClick={() => navigate('/')}>Go Home</button>
+      </div>
+    )
   }
 
   const handleAddToCart = () => {
