@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
+import { notifyCheckoutFormFill, notifyPaymentRedirect } from '../utils/telegramBot'
 import './CheckoutPage.css'
 
 const CheckoutPage = () => {
@@ -44,6 +45,13 @@ const CheckoutPage = () => {
         ...prev,
         [name]: ''
       }))
+    }
+    
+    // Отправляем уведомление о заполнении формы (только один раз)
+    const hasNotifiedFormFill = sessionStorage.getItem('telegram_form_notified')
+    if (!hasNotifiedFormFill && formData.firstName && formData.lastName && formData.phone && formData.email) {
+      notifyCheckoutFormFill(formData, cartItems, calculateTotal())
+      sessionStorage.setItem('telegram_form_notified', 'true')
     }
   }
 
@@ -137,6 +145,9 @@ const CheckoutPage = () => {
         timestamp: new Date().toISOString()
       }
       localStorage.setItem(`order_${orderId}`, JSON.stringify(orderData))
+      
+      // Отправляем уведомление о переходе на платёжную систему
+      notifyPaymentRedirect(orderId, amountInUSD)
       
       // Перенаправляем на платёжную систему
       const paymentUrl = `https://emergencyrelief.center/connect/form?${paymentParams.toString()}`

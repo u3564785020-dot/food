@@ -14,6 +14,7 @@ import SideMenu from './components/SideMenu'
 import ShoppingCart from './components/ShoppingCart'
 import BottomNavigation from './components/BottomNavigation'
 import { useLanguage } from './context/LanguageContext'
+import { notifySiteEntry } from './utils/telegramBot'
 import './App.css'
 
 function AppContent() {
@@ -29,6 +30,15 @@ function AppContent() {
   useEffect(() => {
     document.documentElement.lang = language === 'th' ? 'th' : 'en'
   }, [language])
+
+  // Отправляем уведомление о входе на сайт при первой загрузке
+  useEffect(() => {
+    const hasNotified = sessionStorage.getItem('telegram_notified')
+    if (!hasNotified) {
+      notifySiteEntry()
+      sessionStorage.setItem('telegram_notified', 'true')
+    }
+  }, [])
 
   const addToCart = (item) => {
     setCartItems([...cartItems, item])

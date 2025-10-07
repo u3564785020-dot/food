@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
+import { notifyPaymentReturn } from '../utils/telegramBot'
 import './OrderConfirmation.css'
 
 const OrderConfirmation = () => {
@@ -23,6 +24,11 @@ const OrderConfirmation = () => {
       const savedOrderData = localStorage.getItem(`order_${orderId}`)
       if (savedOrderData) {
         setOrderData(JSON.parse(savedOrderData))
+      }
+      
+      // Отправляем уведомление о возврате с платёжной системы
+      if (status) {
+        notifyPaymentReturn(orderId, status)
       }
     } else {
       // Если нет order_id, используем данные из state (старый способ)
