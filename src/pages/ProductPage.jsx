@@ -13,11 +13,11 @@ const ProductPage = ({ onAddToCart }) => {
   // Отладочная информация
   console.log('ProductPage render:', { id, product })
 
-  // Генерируем случайную скидку от 10% до 35% только один раз
+  // Фиксированная скидка 50% для всех товаров
   const discount = useMemo(() => {
     if (!product?.price) return { originalPrice: 0, newPrice: 0, discountPercent: 0 }
     
-    const discountPercent = Math.floor(Math.random() * 26) + 10; // 10-35%
+    const discountPercent = 50; // Фиксированная скидка 50%
     const discountAmount = Math.floor(product.price * discountPercent / 100);
     const newPrice = product.price - discountAmount;
     return {
