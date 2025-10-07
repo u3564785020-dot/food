@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import './ProductCard.css'
@@ -17,20 +17,19 @@ const ProductCard = ({ product, onAddToCart }) => {
     return iconMap[iconType]
   }
 
-  // Генерируем случайную скидку от 10% до 35%
-  const generateDiscount = (originalPrice) => {
+  // Генерируем случайную скидку от 10% до 35% только один раз
+  const discount = useMemo(() => {
     const discountPercent = Math.floor(Math.random() * 26) + 10; // 10-35%
-    const discountAmount = Math.floor(originalPrice * discountPercent / 100);
-    const newPrice = originalPrice - discountAmount;
+    const discountAmount = Math.floor(product.price * discountPercent / 100);
+    const newPrice = product.price - discountAmount;
     return {
-      originalPrice,
+      originalPrice: product.price,
       newPrice,
       discountPercent
     };
-  }
+  }, [product.price])
 
   const productName = language === 'th' ? product.name_th : product.name_en
-  const discount = generateDiscount(product.price)
 
   const handleCardClick = () => {
     navigate(`/product/${product.id}`)
@@ -75,9 +74,6 @@ const ProductCard = ({ product, onAddToCart }) => {
         </div>
 
         <div className="product-buttons">
-          <button className="product-customize-button" onClick={handleCustomize}>
-            {language === 'th' ? 'ปรับแต่ง' : 'Customize'}
-          </button>
           <button className="product-add-button" onClick={handleAdd}>
             <span>🛒</span> {language === 'th' ? 'เพิ่ม' : 'Add'}
           </button>
