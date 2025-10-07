@@ -32,7 +32,7 @@ const ProductCard = ({ product, onAddToCart }) => {
   const productName = language === 'th' ? product.name_th : product.name_en
   const discount = generateDiscount(product.price)
 
-  const handleCustomize = () => {
+  const handleCardClick = () => {
     navigate(`/product/${product.id}`)
   }
 
@@ -49,7 +49,7 @@ const ProductCard = ({ product, onAddToCart }) => {
   }
 
   return (
-    <div className="product-card">
+    <div className="product-card" onClick={handleCardClick}>
       <div 
         className="product-image"
         style={{ backgroundImage: `url(${product.image})` }}

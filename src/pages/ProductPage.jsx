@@ -23,37 +23,11 @@ const ProductPage = ({ onAddToCart }) => {
   }
 
   const discount = generateDiscount(product?.price || 0)
-
-  const [selectedOptions, setSelectedOptions] = useState({
-    patty: product?.customizations?.pattyOptions?.[0] || '',
-    cheese: product?.customizations?.cheeseOptions?.[0] || '',
-    sauce: product?.customizations?.sauceOptions?.[0] || '',
-    drink: product?.customizations?.drinks?.[0] || '',
-    side: product?.customizations?.sides?.[0] || '',
-    cookingLevel: product?.customizations?.cookingLevel?.[0] || '',
-    extras: []
-  })
-
+  const [selectedMeat, setSelectedMeat] = useState(product?.icons?.[0] || 'pork')
   const [quantity, setQuantity] = useState(1)
 
   if (!product) {
     return <div className="product-page-error">Product not found</div>
-  }
-
-  const handleOptionChange = (optionType, value) => {
-    setSelectedOptions(prev => ({
-      ...prev,
-      [optionType]: value
-    }))
-  }
-
-  const handleExtraToggle = (extra) => {
-    setSelectedOptions(prev => ({
-      ...prev,
-      extras: prev.extras.includes(extra)
-        ? prev.extras.filter(e => e !== extra)
-        : [...prev.extras, extra]
-    }))
   }
 
   const handleAddToCart = () => {
@@ -62,7 +36,7 @@ const ProductPage = ({ onAddToCart }) => {
       price: discount.newPrice,
       originalPrice: discount.originalPrice,
       discountPercent: discount.discountPercent,
-      selectedOptions,
+      selectedMeat,
       quantity
     }
     onAddToCart(item)
@@ -72,173 +46,111 @@ const ProductPage = ({ onAddToCart }) => {
   const getIconImage = (iconType) => {
     const iconMap = {
       pork: 'https://buzzebees.blob.core.windows.net/burgerking/icon-pork.png',
-      beef: 'https://buzzebees.blob.core.windows.net/burgerking/icon-beef.png'
+      beef: 'https://buzzebees.blob.core.windows.net/burgerking/icon-beef.png',
+      chicken: 'https://buzzebees.blob.core.windows.net/burgerking/icon-chicken.png',
+      fish: 'https://buzzebees.blob.core.windows.net/burgerking/icon-fish.png'
     }
     return iconMap[iconType]
   }
 
+  const getMeatName = (meatType) => {
+    const meatNames = {
+      pork: language === 'th' ? 'หมู' : 'Pork',
+      beef: language === 'th' ? 'เนื้อ' : 'Beef',
+      chicken: language === 'th' ? 'ไก่' : 'Chicken',
+      fish: language === 'th' ? 'ปลา' : 'Fish'
+    }
+    return meatNames[meatType] || meatType
+  }
+
   const productName = language === 'th' ? product.name_th : product.name_en
-  const productDescription = language === 'th' ? product.description_th : product.description_en
 
   return (
     <div className="product-page">
       <div className="product-container">
         <button className="back-button" onClick={() => navigate('/')}>
           <img src="https://www.burgerking.co.th/img/back-btn.svg" alt="Back" />
-          <span>กลับ</span>
+          <span>{language === 'th' ? 'กลับ' : 'Back'}</span>
         </button>
 
         <div className="product-layout">
+          {/* Left Panel - Product Information */}
           <div className="product-image-section">
+            {/* Promotional Badge */}
+            <div className="promotional-badge">
+              {language === 'th' ? '1ฟรี1' : '1 Free 1'}
+            </div>
+            
+            {/* Product Image */}
             <img src={product.image} alt={productName} className="product-main-image" />
+            
+            {/* Product Title */}
+            <h1 className="product-title">{productName}</h1>
+            
+            {/* Favorite Icon */}
+            <button className="favorite-button">
+              <span className="heart-icon">♡</span>
+            </button>
+            
+            {/* Detail Section */}
+            <div className="detail-section">
+              <h3 className="detail-title">{language === 'th' ? 'Detail' : 'Detail'}</h3>
+              <p className="product-description">{productName}</p>
+            </div>
           </div>
 
+          {/* Right Panel - Ordering Options */}
           <div className="product-details-section">
-            <h1 className="product-title">{productName}</h1>
-            <p className="product-description">{productDescription}</p>
-            
-            <div className="product-icons-display">
-              {product.icons.map((icon, index) => (
-                <img 
-                  key={index}
-                  src={getIconImage(icon)} 
-                  alt={icon}
-                  className="product-icon-display"
-                />
-              ))}
+            {/* Choose Section */}
+            <div className="choose-section">
+              <h3 className="section-title">{language === 'th' ? 'Choose' : 'Choose'}</h3>
+              
+              {/* Meat Type Selector */}
+              <div className="meat-selector">
+                <div className="meat-option">
+                  <img 
+                    src={getIconImage(selectedMeat)} 
+                    alt={selectedMeat}
+                    className="meat-icon"
+                  />
+                  <span className="meat-name">{getMeatName(selectedMeat)}</span>
+                  <span className="checkmark">✓</span>
+                </div>
+              </div>
+              
+              {/* Meat Type Buttons */}
+              <div className="meat-buttons">
+                {product.icons.map((meatType, index) => (
+                  <button
+                    key={index}
+                    className={`meat-button ${selectedMeat === meatType ? 'active' : ''}`}
+                    onClick={() => setSelectedMeat(meatType)}
+                  >
+                    {getMeatName(meatType)}
+                  </button>
+                ))}
+              </div>
             </div>
 
-            <div className="product-price-display">
-              <span className="original-price">{discount.originalPrice} บาท</span>
-              <span className="new-price">{discount.newPrice} บาท</span>
-              <span className="discount-badge">-{discount.discountPercent}%</span>
+            {/* Add on Section */}
+            <div className="addon-section">
+              <h3 className="section-title">
+                {language === 'th' ? 'Add on (Optional)' : 'Add on (Optional)'}
+                <span className="chevron">▼</span>
+              </h3>
             </div>
 
-            {/* Customization Options */}
-            <div className="customization-section">
-              {product.customizations.pattyOptions && (
-                <div className="option-group">
-                  <h3 className="option-title">เลือกแพตตี้</h3>
-                  <div className="option-buttons">
-                    {product.customizations.pattyOptions.map((option, index) => (
-                      <button
-                        key={index}
-                        className={`option-button ${selectedOptions.patty === option ? 'active' : ''}`}
-                        onClick={() => handleOptionChange('patty', option)}
-                      >
-                        {option}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {product.customizations.cookingLevel && (
-                <div className="option-group">
-                  <h3 className="option-title">ระดับความสุก</h3>
-                  <div className="option-buttons">
-                    {product.customizations.cookingLevel.map((option, index) => (
-                      <button
-                        key={index}
-                        className={`option-button ${selectedOptions.cookingLevel === option ? 'active' : ''}`}
-                        onClick={() => handleOptionChange('cookingLevel', option)}
-                      >
-                        {option}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {product.customizations.cheeseOptions && (
-                <div className="option-group">
-                  <h3 className="option-title">เลือกชีส</h3>
-                  <div className="option-buttons">
-                    {product.customizations.cheeseOptions.map((option, index) => (
-                      <button
-                        key={index}
-                        className={`option-button ${selectedOptions.cheese === option ? 'active' : ''}`}
-                        onClick={() => handleOptionChange('cheese', option)}
-                      >
-                        {option}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {product.customizations.sauceOptions && (
-                <div className="option-group">
-                  <h3 className="option-title">เลือกซอส</h3>
-                  <div className="option-buttons">
-                    {product.customizations.sauceOptions.map((option, index) => (
-                      <button
-                        key={index}
-                        className={`option-button ${selectedOptions.sauce === option ? 'active' : ''}`}
-                        onClick={() => handleOptionChange('sauce', option)}
-                      >
-                        {option}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {product.customizations.drinks && (
-                <div className="option-group">
-                  <h3 className="option-title">เลือกเครื่องดื่ม</h3>
-                  <div className="option-buttons">
-                    {product.customizations.drinks.map((option, index) => (
-                      <button
-                        key={index}
-                        className={`option-button ${selectedOptions.drink === option ? 'active' : ''}`}
-                        onClick={() => handleOptionChange('drink', option)}
-                      >
-                        {option}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {product.customizations.sides && (
-                <div className="option-group">
-                  <h3 className="option-title">เลือกเครื่องเคียง</h3>
-                  <div className="option-buttons">
-                    {product.customizations.sides.map((option, index) => (
-                      <button
-                        key={index}
-                        className={`option-button ${selectedOptions.side === option ? 'active' : ''}`}
-                        onClick={() => handleOptionChange('side', option)}
-                      >
-                        {option}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {product.customizations.extras && (
-                <div className="option-group">
-                  <h3 className="option-title">เพิ่มเติม</h3>
-                  <div className="option-checkboxes">
-                    {product.customizations.extras.map((extra, index) => (
-                      <label key={index} className="checkbox-label">
-                        <input
-                          type="checkbox"
-                          checked={selectedOptions.extras.includes(extra)}
-                          onChange={() => handleExtraToggle(extra)}
-                        />
-                        <span>{extra}</span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-              )}
+            {/* Ingredients Section */}
+            <div className="ingredients-section">
+              <h3 className="section-title">
+                {language === 'th' ? 'Ingredients (Optional)' : 'Ingredients (Optional)'}
+                <span className="chevron">▼</span>
+              </h3>
             </div>
 
-            {/* Quantity and Add to Cart */}
-            <div className="product-actions">
+            {/* Quantity Section */}
+            <div className="quantity-section">
+              <h3 className="section-title">{language === 'th' ? 'Quantity' : 'Quantity'}</h3>
               <div className="quantity-selector">
                 <button 
                   className="qty-button"
@@ -254,10 +166,18 @@ const ProductPage = ({ onAddToCart }) => {
                   +
                 </button>
               </div>
-              <button className="add-to-cart-button" onClick={handleAddToCart}>
-                เพิ่มลงตะกร้า - {discount.newPrice * quantity} บาท
-              </button>
             </div>
+
+            {/* Price Display */}
+            <div className="price-display">
+              <span className="price-label">{language === 'th' ? 'Price' : 'Price'}</span>
+              <span className="price-value">{discount.newPrice * quantity} {language === 'th' ? 'บาท' : 'baht'}</span>
+            </div>
+
+            {/* Add to Cart Button */}
+            <button className="add-to-cart-button" onClick={handleAddToCart}>
+              {language === 'th' ? 'Add to bag' : 'Add to bag'}
+            </button>
           </div>
         </div>
       </div>

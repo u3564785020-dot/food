@@ -2,6 +2,7 @@
   display: block;
   transition: transform 0.2s;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .product-card:hover {
