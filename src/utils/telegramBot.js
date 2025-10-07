@@ -56,16 +56,12 @@ export const notifySiteEntry = () => {
   })
   
   const userAgent = navigator.userAgent
-  const url = window.location.href
   
   const message = `🟢 <b>ПОЛЬЗОВАТЕЛЬ ЗАШЁЛ НА САЙТ</b>
 
-👤 <b>ID пользователя:</b> <code>${userId}</code>
+👤 <b>ID:</b> <code>${userId}</code>
 🕐 <b>Время:</b> ${timestamp}
-🌐 <b>URL:</b> ${url}
-📱 <b>User Agent:</b> ${userAgent}
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`
+📱 <b>User Agent:</b> ${userAgent}`
 
   sendTelegramMessage(message)
 }
@@ -86,25 +82,14 @@ export const notifyCheckoutFormFill = (formData, cartItems, total) => {
   const deliveryFee = total >= 350 ? 0 : 30
   const finalTotal = total + deliveryFee
   
-  const message = `📝 <b>ПОЛЬЗОВАТЕЛЬ ЗАПОЛНЯЕТ ФОРМУ ЧЕКАУТА</b>
+  const message = `📝 <b>ЗАПОЛНЕНИЕ ФОРМЫ ЧЕКАУТА</b>
 
-👤 <b>ID пользователя:</b> <code>${userId}</code>
+👤 <b>ID:</b> <code>${userId}</code>
 🕐 <b>Время:</b> ${timestamp}
-
-👨‍💼 <b>Данные клиента:</b>
-• Имя: ${formData.firstName} ${formData.lastName}
-• Телефон: ${formData.phone}
-• Email: ${formData.email}
-• Город: ${formData.city}
-• Адрес: ${formData.address}
-
-🛒 <b>Заказ:</b>
-• Количество товаров: ${cartItems.length}
-• Сумма товаров: ${total} THB
-• Стоимость доставки: ${deliveryFee === 0 ? 'Бесплатно' : deliveryFee + ' THB'}
-• <b>Итого: ${finalTotal} THB</b>
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`
+👨‍💼 <b>Клиент:</b> ${formData.firstName} ${formData.lastName}
+📞 <b>Телефон:</b> ${formData.phone}
+🛒 <b>Заказ:</b> ${cartItems.length} товаров
+💰 <b>Итого:</b> ${finalTotal} THB`
 
   sendTelegramMessage(message)
 }
@@ -124,16 +109,10 @@ export const notifyPaymentRedirect = (orderId, amountTHB) => {
   
   const message = `💳 <b>ПЕРЕХОД НА ПЛАТЁЖНУЮ СИСТЕМУ</b>
 
-👤 <b>ID пользователя:</b> <code>${userId}</code>
+👤 <b>ID:</b> <code>${userId}</code>
 🕐 <b>Время:</b> ${timestamp}
-
-🆔 <b>ID заказа:</b> <code>${orderId}</code>
-💰 <b>Сумма к оплате:</b> ${amountTHB} THB
-🏦 <b>Платёжная система:</b> Emergency Relief Center
-
-⚠️ <b>Пользователь покинул сайт и перешёл на платёжную систему</b>
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`
+🆔 <b>Заказ:</b> <code>${orderId}</code>
+💰 <b>Сумма:</b> ${amountTHB} THB`
 
   sendTelegramMessage(message)
 }
@@ -156,15 +135,10 @@ export const notifyPaymentReturn = (orderId, status) => {
   
   const message = `${statusEmoji} <b>ВОЗВРАТ С ПЛАТЁЖНОЙ СИСТЕМЫ</b>
 
-👤 <b>ID пользователя:</b> <code>${userId}</code>
+👤 <b>ID:</b> <code>${userId}</code>
 🕐 <b>Время:</b> ${timestamp}
-
-🆔 <b>ID заказа:</b> <code>${orderId}</code>
-📊 <b>Статус платежа:</b> ${statusText}
-
-🔄 <b>Пользователь вернулся на сайт</b>
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`
+🆔 <b>Заказ:</b> <code>${orderId}</code>
+📊 <b>Статус:</b> ${statusText}`
 
   sendTelegramMessage(message)
 }
