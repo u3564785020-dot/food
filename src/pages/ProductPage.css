@@ -74,9 +74,32 @@
 }
 
 .product-price-display {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.product-price-display .original-price {
+  font-size: 20px;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.product-price-display .new-price {
   font-size: 32px;
   font-weight: 700;
   color: var(--color-red);
+}
+
+.product-price-display .discount-badge {
+  font-size: 14px;
+  color: white;
+  background-color: var(--color-red);
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  align-self: flex-start;
 }
 
 .customization-section {

@@ -17,7 +17,20 @@ const ProductCard = ({ product, onAddToCart }) => {
     return iconMap[iconType]
   }
 
+  // Генерируем случайную скидку от 10% до 35%
+  const generateDiscount = (originalPrice) => {
+    const discountPercent = Math.floor(Math.random() * 26) + 10; // 10-35%
+    const discountAmount = Math.floor(originalPrice * discountPercent / 100);
+    const newPrice = originalPrice - discountAmount;
+    return {
+      originalPrice,
+      newPrice,
+      discountPercent
+    };
+  }
+
   const productName = language === 'th' ? product.name_th : product.name_en
+  const discount = generateDiscount(product.price)
 
   const handleCustomize = () => {
     navigate(`/product/${product.id}`)
@@ -25,7 +38,14 @@ const ProductCard = ({ product, onAddToCart }) => {
 
   const handleAdd = (e) => {
     e.stopPropagation()
-    onAddToCart(product)
+    // Создаем продукт с новой ценой для добавления в корзину
+    const productWithNewPrice = {
+      ...product,
+      price: discount.newPrice,
+      originalPrice: discount.originalPrice,
+      discountPercent: discount.discountPercent
+    }
+    onAddToCart(productWithNewPrice)
   }
 
   return (
@@ -37,7 +57,11 @@ const ProductCard = ({ product, onAddToCart }) => {
       <div className="product-info">
         <div className="product-name">{productName}</div>
         
-        <div className="product-price">{product.price} {t('baht')}</div>
+        <div className="product-price">
+          <span className="original-price">{discount.originalPrice} {t('baht')}</span>
+          <span className="new-price">{discount.newPrice} {t('baht')}</span>
+          <span className="discount-badge">-{discount.discountPercent}%</span>
+        </div>
         
         <div className="product-icons">
           {product.icons.map((icon, index) => (

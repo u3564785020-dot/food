@@ -1,6 +1,18 @@
 // BURGER KING THAILAND - ТОЛЬКО РЕАЛЬНЫЕ ТОВАРЫ С РЕАЛЬНЫМИ ФОТО
 // Все ID и изображения взяты с burgerking.co.th
 
+// Функция для генерации случайной скидки от 10% до 35%
+const generateDiscount = (originalPrice) => {
+  const discountPercent = Math.floor(Math.random() * 26) + 10; // 10-35%
+  const discountAmount = Math.floor(originalPrice * discountPercent / 100);
+  const newPrice = originalPrice - discountAmount;
+  return {
+    originalPrice,
+    newPrice,
+    discountPercent
+  };
+}
+
 export const categories = [
   {
     id: 147409,
@@ -91,6 +103,9 @@ export const products = [
     name_th: 'แบล็คทรัฟเฟิล มัชรูมสวิส',
     name_en: 'Black Truffle Mushroom Swiss',
     price: 179,
+    originalPrice: 179,
+    newPrice: generateDiscount(179).newPrice,
+    discountPercent: generateDiscount(179).discountPercent,
     image: 'https://buzzebees.blob.core.windows.net/campaigns/1553461-large',
     categoryId: 147409,
     icons: ['pork', 'beef']

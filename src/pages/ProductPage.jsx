@@ -10,6 +10,20 @@ const ProductPage = ({ onAddToCart }) => {
   const { language } = useLanguage()
   const product = getProductById(id)
 
+  // Генерируем случайную скидку от 10% до 35%
+  const generateDiscount = (originalPrice) => {
+    const discountPercent = Math.floor(Math.random() * 26) + 10; // 10-35%
+    const discountAmount = Math.floor(originalPrice * discountPercent / 100);
+    const newPrice = originalPrice - discountAmount;
+    return {
+      originalPrice,
+      newPrice,
+      discountPercent
+    };
+  }
+
+  const discount = generateDiscount(product?.price || 0)
+
   const [selectedOptions, setSelectedOptions] = useState({
     patty: product?.customizations?.pattyOptions?.[0] || '',
     cheese: product?.customizations?.cheeseOptions?.[0] || '',
@@ -45,6 +59,9 @@ const ProductPage = ({ onAddToCart }) => {
   const handleAddToCart = () => {
     const item = {
       ...product,
+      price: discount.newPrice,
+      originalPrice: discount.originalPrice,
+      discountPercent: discount.discountPercent,
       selectedOptions,
       quantity
     }
@@ -91,7 +108,11 @@ const ProductPage = ({ onAddToCart }) => {
               ))}
             </div>
 
-            <div className="product-price-display">{product.price} บาท</div>
+            <div className="product-price-display">
+              <span className="original-price">{discount.originalPrice} บาท</span>
+              <span className="new-price">{discount.newPrice} บาท</span>
+              <span className="discount-badge">-{discount.discountPercent}%</span>
+            </div>
 
             {/* Customization Options */}
             <div className="customization-section">
@@ -234,7 +255,7 @@ const ProductPage = ({ onAddToCart }) => {
                 </button>
               </div>
               <button className="add-to-cart-button" onClick={handleAddToCart}>
-                เพิ่มลงตะกร้า - {product.price * quantity} บาท
+                เพิ่มลงตะกร้า - {discount.newPrice * quantity} บาท
               </button>
             </div>
           </div>
