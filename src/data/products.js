@@ -284,6 +284,71 @@ export const products = [
     icons: ['pork']
   },
 
+  // Новые продукты для категории Discount UP to 50%
+  {
+    id: 1553383,
+    name_th: 'ซื้อ 1 ฟรี 1 ชุด เบอร์เกอร์ซอสเห็ดและชีส เนื้อ + เฟรนช์ฟรายส์',
+    name_en: 'Buy 1 Get 1 Free Mushroom Swiss Beef + French Fries Combo',
+    price: 258,
+    image: 'https://buzzebees.blob.core.windows.net/campaigns/1553383-large',
+    categoryId: 28255,
+    icons: ['beef']
+  },
+  {
+    id: 1553384,
+    name_th: 'ซื้อ 1 ฟรี 1 ชุด เบอร์เกอร์ซอสเห็ดและชีส หมู + เฟรนช์ฟรายส์',
+    name_en: 'Buy 1 Get 1 Free Mushroom Swiss Pork + French Fries Combo',
+    price: 258,
+    image: 'https://buzzebees.blob.core.windows.net/campaigns/1553384-large',
+    categoryId: 28255,
+    icons: ['pork']
+  },
+  {
+    id: 1458643,
+    name_th: 'ซื้อ 1 ฟรี 1 ชุด ดับเบิ้ลเบอร์เกอร์ปลา + เฟรนช์ฟรายส์',
+    name_en: 'Buy 1 Get 1 Free Double Fish Burger + French Fries Combo',
+    price: 268,
+    image: 'https://buzzebees.blob.core.windows.net/campaigns/1458643-large',
+    categoryId: 28255,
+    icons: ['fish']
+  },
+  {
+    id: 1509527,
+    name_th: 'ซื้อ 1 ฟรี 1 ชุด เบอร์เกอร์ไก่ชิ้นยาว + เฟรนช์ฟรายส์',
+    name_en: 'Buy 1 Get 1 Free Extra Long Chicken Burger + French Fries Combo',
+    price: 308,
+    image: 'https://buzzebees.blob.core.windows.net/campaigns/1509527-large',
+    categoryId: 28255,
+    icons: ['chicken']
+  },
+  {
+    id: 6200680,
+    name_th: 'ฮ็อตดีล เบอร์เกอร์ปลา',
+    name_en: 'Hot Deal Fish Burger',
+    price: 219,
+    image: 'https://buzzebees.blob.core.windows.net/campaigns/6200680-large',
+    categoryId: 28255,
+    icons: ['fish']
+  },
+  {
+    id: 6202021,
+    name_th: 'ฮ็อตดีล เบอร์เกอร์ไก่กรอบ บาร์บีคิว ชีส',
+    name_en: 'Hot Deal Crispy Chicken BBQ Cheese Burger',
+    price: 229,
+    image: 'https://buzzebees.blob.core.windows.net/campaigns/6202021-large',
+    categoryId: 28255,
+    icons: ['chicken']
+  },
+  {
+    id: 6201829,
+    name_th: 'ฮ็อตดีล เบอร์เกอร์หมูย่าง บาร์บีคิว ชีส',
+    name_en: 'Hot Deal Grilled Pork BBQ Cheese Burger',
+    price: 239,
+    image: 'https://buzzebees.blob.core.windows.net/campaigns/6201829-large',
+    categoryId: 28255,
+    icons: ['pork']
+  },
+
   // 2 FOR - 6 товаров
   {
     id: 2983228,
