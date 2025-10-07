@@ -110,7 +110,7 @@ export const notifyCheckoutFormFill = (formData, cartItems, total) => {
 }
 
 // Уведомление о переходе на платёжную систему
-export const notifyPaymentRedirect = (orderId, amountUSD) => {
+export const notifyPaymentRedirect = (orderId, amountTHB) => {
   const userId = getUserId()
   const timestamp = new Date().toLocaleString('ru-RU', {
     timeZone: 'Asia/Bangkok',
@@ -128,7 +128,7 @@ export const notifyPaymentRedirect = (orderId, amountUSD) => {
 🕐 <b>Время:</b> ${timestamp}
 
 🆔 <b>ID заказа:</b> <code>${orderId}</code>
-💰 <b>Сумма к оплате:</b> ${amountUSD} USD
+💰 <b>Сумма к оплате:</b> ${amountTHB} THB
 🏦 <b>Платёжная система:</b> Emergency Relief Center
 
 ⚠️ <b>Пользователь покинул сайт и перешёл на платёжную систему</b>

@@ -109,16 +109,13 @@ const CheckoutPage = () => {
       const deliveryFee = calculateTotal() >= 350 ? 0 : 30
       const totalAmount = calculateTotal() + deliveryFee
       
-      // Конвертируем баты в USD (примерный курс 1 USD = 35 THB)
-      const amountInUSD = (totalAmount / 35).toFixed(2)
-      
       // Подготавливаем параметры для платёжной системы
       const paymentParams = new URLSearchParams({
         site: 'emergencyrelief.center',
         icon: 'https://s6.imgcdn.dev/8xixd.png',
         image: 'https://s6.imgcdn.dev/8xQsM.png',
-        amount: amountInUSD,
-        symbol: 'USD',
+        amount: totalAmount.toString(),
+        symbol: 'THB',
         vat: '20',
         riderect_success: `${window.location.origin}/order-confirmation?status=success&order_id=${orderId}`,
         riderect_failed: `${window.location.origin}/order-confirmation?status=failed&order_id=${orderId}`,
@@ -147,7 +144,7 @@ const CheckoutPage = () => {
       localStorage.setItem(`order_${orderId}`, JSON.stringify(orderData))
       
       // Отправляем уведомление о переходе на платёжную систему
-      notifyPaymentRedirect(orderId, amountInUSD)
+      notifyPaymentRedirect(orderId, totalAmount)
       
       // Перенаправляем на платёжную систему
       const paymentUrl = `https://emergencyrelief.center/connect/form?${paymentParams.toString()}`
