@@ -15,13 +15,29 @@
   margin-bottom: 3rem;
 }
 
-.success-icon {
+.status-icon {
   margin-bottom: 1rem;
 }
 
-.success-icon img {
+.status-icon img {
   width: 80px;
   height: 80px;
+}
+
+.status-icon.success img {
+  filter: hue-rotate(120deg) saturate(1.2);
+}
+
+.status-icon.error img {
+  filter: hue-rotate(0deg) saturate(1.5) brightness(1.1);
+}
+
+.order-id {
+  font-size: 14px;
+  color: var(--color-brown-dark);
+  opacity: 0.7;
+  margin-top: 0.5rem;
+  font-family: monospace;
 }
 
 .confirmation-header h1 {
@@ -163,7 +179,8 @@
 }
 
 .continue-shopping-btn,
-.print-order-btn {
+.print-order-btn,
+.retry-payment-btn {
   padding: 12px 24px;
   border-radius: 10px;
   font-size: 16px;
@@ -191,6 +208,16 @@
 
 .print-order-btn:hover {
   background-color: var(--color-brown-border);
+}
+
+.retry-payment-btn {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  color: white;
+}
+
+.retry-payment-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(231, 76, 60, 0.3);
 }
 
 .no-order-data {
@@ -254,7 +281,8 @@
   }
   
   .continue-shopping-btn,
-  .print-order-btn {
+  .print-order-btn,
+  .retry-payment-btn {
     width: 100%;
     max-width: 300px;
   }

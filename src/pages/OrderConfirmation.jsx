@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import './OrderConfirmation.css'
@@ -7,8 +7,28 @@ const OrderConfirmation = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const { t } = useLanguage()
+  const [orderData, setOrderData] = useState(null)
+  const [paymentStatus, setPaymentStatus] = useState(null)
   
-  const orderData = location.state?.orderData
+  useEffect(() => {
+    // Получаем параметры из URL
+    const urlParams = new URLSearchParams(location.search)
+    const status = urlParams.get('status')
+    const orderId = urlParams.get('order_id')
+    
+    setPaymentStatus(status)
+    
+    if (orderId) {
+      // Пытаемся получить данные заказа из localStorage
+      const savedOrderData = localStorage.getItem(`order_${orderId}`)
+      if (savedOrderData) {
+        setOrderData(JSON.parse(savedOrderData))
+      }
+    } else {
+      // Если нет order_id, используем данные из state (старый способ)
+      setOrderData(location.state?.orderData)
+    }
+  }, [location])
 
   if (!orderData) {
     return (
@@ -29,15 +49,46 @@ const OrderConfirmation = () => {
   const deliveryFee = total >= 350 ? 0 : 30
   const finalTotal = total + deliveryFee
 
+  // Определяем статус и сообщение в зависимости от результата платежа
+  const isSuccess = paymentStatus === 'success'
+  const isFailed = paymentStatus === 'failed'
+  
+  const getStatusMessage = () => {
+    if (isSuccess) {
+      return {
+        title: t('paymentSuccessful'),
+        message: t('paymentSuccessMessage'),
+        icon: 'https://www.burgerking.co.th/img/ic-check-circle.svg'
+      }
+    } else if (isFailed) {
+      return {
+        title: t('paymentFailed'),
+        message: t('paymentFailedMessage'),
+        icon: 'https://www.burgerking.co.th/img/ic-error-circle.svg'
+      }
+    } else {
+      return {
+        title: t('orderConfirmed'),
+        message: t('orderConfirmationMessage'),
+        icon: 'https://www.burgerking.co.th/img/ic-check-circle.svg'
+      }
+    }
+  }
+
+  const statusInfo = getStatusMessage()
+
   return (
     <div className="order-confirmation-page">
       <div className="order-confirmation-container">
         <div className="confirmation-header">
-          <div className="success-icon">
-            <img src="https://www.burgerking.co.th/img/ic-check-circle.svg" alt="Success" />
+          <div className={`status-icon ${isFailed ? 'error' : 'success'}`}>
+            <img src={statusInfo.icon} alt={isSuccess ? "Success" : "Error"} />
           </div>
-          <h1>{t('orderConfirmed')}</h1>
-          <p className="confirmation-message">{t('orderConfirmationMessage')}</p>
+          <h1>{statusInfo.title}</h1>
+          <p className="confirmation-message">{statusInfo.message}</p>
+          {orderData.orderId && (
+            <p className="order-id">Order ID: {orderData.orderId}</p>
+          )}
         </div>
 
         <div className="confirmation-content">
@@ -102,12 +153,25 @@ const OrderConfirmation = () => {
         </div>
 
         <div className="confirmation-actions">
-          <button onClick={() => navigate('/')} className="continue-shopping-btn">
-            {t('continueShopping')}
-          </button>
-          <button onClick={() => window.print()} className="print-order-btn">
-            {t('printOrder')}
-          </button>
+          {isFailed ? (
+            <>
+              <button onClick={() => navigate('/checkout')} className="retry-payment-btn">
+                {t('retryPayment')}
+              </button>
+              <button onClick={() => navigate('/')} className="back-to-home-btn">
+                {t('backToHome')}
+              </button>
+            </>
+          ) : (
+            <>
+              <button onClick={() => navigate('/')} className="continue-shopping-btn">
+                {t('continueShopping')}
+              </button>
+              <button onClick={() => window.print()} className="print-order-btn">
+                {t('printOrder')}
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>

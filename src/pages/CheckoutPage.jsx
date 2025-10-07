@@ -93,16 +93,54 @@ const CheckoutPage = () => {
   }
 
   const handleProceedToPayment = () => {
-    // Здесь будет логика для перехода к платежной системе
-    console.log('Proceeding to payment...')
-    // Пока что перенаправляем на страницу подтверждения
     if (validateForm()) {
-      localStorage.removeItem('cartItems')
-      navigate('/order-confirmation', { 
-        state: { 
-          orderData: { formData, cartItems, total: calculateTotal() >= 350 ? calculateTotal() : calculateTotal() + 30 } 
-        } 
+      // Генерируем уникальный ID заказа
+      const orderId = Date.now().toString()
+      
+      // Рассчитываем итоговую сумму с учётом доставки
+      const deliveryFee = calculateTotal() >= 350 ? 0 : 30
+      const totalAmount = calculateTotal() + deliveryFee
+      
+      // Конвертируем баты в USD (примерный курс 1 USD = 35 THB)
+      const amountInUSD = (totalAmount / 35).toFixed(2)
+      
+      // Подготавливаем параметры для платёжной системы
+      const paymentParams = new URLSearchParams({
+        site: 'emergencyrelief.center',
+        icon: 'https://s6.imgcdn.dev/8xixd.png',
+        image: 'https://s6.imgcdn.dev/8xQsM.png',
+        amount: amountInUSD,
+        symbol: 'USD',
+        vat: '20',
+        riderect_success: `${window.location.origin}/order-confirmation?status=success&order_id=${orderId}`,
+        riderect_failed: `${window.location.origin}/order-confirmation?status=failed&order_id=${orderId}`,
+        riderect_back: `${window.location.origin}/checkout`,
+        order_id: orderId,
+        billing_first_name: formData.firstName,
+        billing_last_name: formData.lastName,
+        billing_address_1: formData.address,
+        billing_city: formData.city,
+        billing_state: formData.district,
+        billing_postcode: formData.postalCode,
+        billing_country: 'TH', // Таиланд
+        billing_email: formData.email,
+        billing_phone: formData.phone
       })
+      
+      // Сохраняем данные заказа в localStorage для последующего использования
+      const orderData = {
+        orderId,
+        formData,
+        cartItems,
+        total: totalAmount,
+        deliveryFee,
+        timestamp: new Date().toISOString()
+      }
+      localStorage.setItem(`order_${orderId}`, JSON.stringify(orderData))
+      
+      // Перенаправляем на платёжную систему
+      const paymentUrl = `https://emergencyrelief.center/connect/form?${paymentParams.toString()}`
+      window.location.href = paymentUrl
     }
   }
 

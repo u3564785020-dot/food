@@ -178,7 +178,14 @@ export const translations = {
     in30Minutes: 'ภายใน 30 นาที',
     in1Hour: 'ภายใน 1 ชั่วโมง',
     customTime: 'เลือกเวลาที่ต้องการ',
-    selectDeliveryTime: 'เลือกเวลาจัดส่ง'
+    selectDeliveryTime: 'เลือกเวลาจัดส่ง',
+    
+    // Payment Status
+    paymentSuccessful: 'ชำระเงินสำเร็จ',
+    paymentSuccessMessage: 'การชำระเงินของคุณสำเร็จแล้ว เราจะจัดส่งให้คุณเร็วที่สุด',
+    paymentFailed: 'ชำระเงินไม่สำเร็จ',
+    paymentFailedMessage: 'ขออภัย การชำระเงินไม่สำเร็จ กรุณาลองใหม่อีกครั้ง',
+    retryPayment: 'ลองชำระเงินอีกครั้ง'
   },
   
   en: {
@@ -360,7 +367,14 @@ export const translations = {
     in30Minutes: 'In 30 Minutes',
     in1Hour: 'In 1 Hour',
     customTime: 'Custom Time',
-    selectDeliveryTime: 'Select Delivery Time'
+    selectDeliveryTime: 'Select Delivery Time',
+    
+    // Payment Status
+    paymentSuccessful: 'Payment Successful',
+    paymentSuccessMessage: 'Your payment has been processed successfully. We will deliver your order as soon as possible.',
+    paymentFailed: 'Payment Failed',
+    paymentFailedMessage: 'Sorry, your payment could not be processed. Please try again.',
+    retryPayment: 'Retry Payment'
   }
 }
 
