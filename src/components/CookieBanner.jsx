@@ -1,9 +1,19 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useLanguage } from '../context/LanguageContext'
 import './CookieBanner.css'
 
 const CookieBanner = ({ onAccept }) => {
   const { t } = useLanguage()
+
+  // Автоматически закрываем баннер через 7 секунд
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onAccept()
+    }, 7000) // 7 секунд
+
+    return () => clearTimeout(timer)
+  }, [onAccept])
+
   return (
     <div className="cookie-banner">
       <div className="cookie-content">
