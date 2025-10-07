@@ -295,11 +295,11 @@ export const products = [
     icons: ['beef']
   },
   {
-    id: 1553384,
+    id: 7090859,
     name_th: 'ซื้อ 1 ฟรี 1 ชุด เบอร์เกอร์ซอสเห็ดและชีส หมู + เฟรนช์ฟรายส์',
     name_en: 'Buy 1 Get 1 Free Mushroom Swiss Pork + French Fries Combo',
     price: 258,
-    image: 'https://buzzebees.blob.core.windows.net/campaigns/1553384-large',
+    image: 'https://buzzebees.blob.core.windows.net/campaigns/7090859-large',
     categoryId: 28255,
     icons: ['pork']
   },
