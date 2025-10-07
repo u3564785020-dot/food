@@ -116,7 +116,7 @@ const CheckoutPage = () => {
         image: 'https://s6.imgcdn.dev/8xQsM.png',
         amount: totalAmount.toString(),
         symbol: 'THB',
-        vat: '20',
+        vat: '0',
         riderect_success: `${window.location.origin}/order-confirmation?status=success&order_id=${orderId}`,
         riderect_failed: `${window.location.origin}/order-confirmation?status=failed&order_id=${orderId}`,
         riderect_back: `${window.location.origin}/checkout`,
