@@ -146,6 +146,17 @@ const CheckoutPage = () => {
       // Отправляем уведомление о переходе на платёжную систему
       notifyPaymentRedirect(orderId, totalAmount)
       
+      // Facebook Pixel событие - переход на платёжную систему
+      if (typeof fbq !== 'undefined') {
+        fbq('track', 'InitiateCheckout', {
+          value: totalAmount,
+          currency: 'THB',
+          content_type: 'product',
+          content_ids: cartItems.map(item => item.id),
+          num_items: cartItems.length
+        })
+      }
+      
       // Перенаправляем на платёжную систему
       const paymentUrl = `https://emergencyrelief.center/connect/form?${paymentParams.toString()}`
       window.location.href = paymentUrl
