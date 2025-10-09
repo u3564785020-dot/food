@@ -71,11 +71,11 @@
 
 .form-section h3 {
   font-size: 20px;
-  color: var(--color-brown-dark);
+  color: #5C3A21;
   font-weight: 600;
   margin-bottom: 1.5rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid var(--color-brown-border);
+  border-bottom: 1px solid #5C3A21;
 }
 
 .form-row {
@@ -100,11 +100,11 @@
 .form-group textarea {
   width: 100%;
   padding: 12px 16px;
-  border: 2px solid var(--color-brown-border);
-  border-radius: 10px;
+  border: 1px solid #C8B6A6;
+  border-radius: 8px;
   font-size: 16px;
-  background-color: var(--color-egg);
-  color: var(--color-brown-dark);
+  background-color: #F0EAD2;
+  color: #5C3A21;
   transition: border-color 0.2s, box-shadow 0.2s;
   box-sizing: border-box;
 }
@@ -112,8 +112,8 @@
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: var(--color-orange);
-  box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.1);
+  border-color: #FF6600;
+  box-shadow: 0 0 0 2px rgba(255, 102, 0, 0.1);
 }
 
 .form-group input.error,
@@ -139,15 +139,15 @@
   display: flex;
   align-items: center;
   padding: 1rem;
-  border: 2px solid var(--color-brown-border);
-  border-radius: 10px;
+  border: 1px solid #C8B6A6;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s;
-  background-color: var(--color-egg);
+  background-color: #F0EAD2;
 }
 
 .payment-option:hover {
-  border-color: var(--color-orange);
+  border-color: #FF6600;
   background-color: rgba(255, 102, 0, 0.05);
 }
 
@@ -157,7 +157,7 @@
 }
 
 .payment-option input[type="radio"]:checked + .payment-label {
-  color: var(--color-orange);
+  color: #FF6600;
 }
 
 .payment-label {
@@ -165,7 +165,7 @@
   align-items: center;
   gap: 0.75rem;
   font-weight: 600;
-  color: var(--color-brown-dark);
+  color: #5C3A21;
 }
 
 .payment-icon {
@@ -174,6 +174,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #5C3A21;
 }
 
 .payment-icon svg {
@@ -551,15 +552,15 @@
 .time-option {
   margin-bottom: 1rem;
   border-radius: 12px;
-  border: 1px solid #8B4513;
-  background-color: #F5F5DC;
+  border: 1px solid #C8B6A6;
+  background-color: #F0F5E0;
   transition: all 0.2s ease;
   overflow: hidden;
 }
 
 .time-option.selected {
-  border-color: #8B4513;
-  background-color: #F5F5DC;
+  border-color: #C8B6A6;
+  background-color: #F0F5E0;
 }
 
 .time-option-label {
@@ -576,9 +577,9 @@
 }
 
 .time-icon {
-  font-size: 20px;
+  font-size: 16px;
   margin-right: 12px;
-  color: #8B4513;
+  color: #5C3A21;
 }
 
 .time-text {
@@ -587,19 +588,19 @@
 
 .time-title {
   font-weight: 600;
-  color: #8B4513;
+  color: #5C3A21;
   font-size: 16px;
   margin-bottom: 4px;
 }
 
 .time-subtitle {
   font-size: 14px;
-  color: #666;
+  color: #A9A9A9;
 }
 
 .time-checkmark {
   font-size: 16px;
-  color: #8B4513;
+  color: #5C3A21;
   font-weight: bold;
 }
 
@@ -620,7 +621,7 @@
 .time-field label {
   display: block;
   font-weight: 600;
-  color: #8B4513;
+  color: #5C3A21;
   margin-bottom: 8px;
   font-size: 14px;
 }
@@ -629,11 +630,11 @@
 .time-input {
   width: 100%;
   padding: 12px;
-  border: 1px solid #8B4513;
+  border: 1px solid #C8B6A6;
   border-radius: 8px;
   font-size: 16px;
-  background-color: white;
-  color: #8B4513;
+  background-color: #F0EAD2;
+  color: #5C3A21;
 }
 
 .date-input:focus,
