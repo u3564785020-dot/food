@@ -52,7 +52,7 @@ const OrderConfirmation = () => {
   }
 
   const { formData, cartItems, total } = orderData
-  const deliveryFee = total >= 350 ? 0 : 30
+  const deliveryFee = 0 // Доставка всегда бесплатная
   const finalTotal = total + deliveryFee
 
   // Определяем статус и сообщение в зависимости от результата платежа
@@ -145,10 +145,6 @@ const OrderConfirmation = () => {
               <div className="summary-line">
                 <span>{t('subtotal')}</span>
                 <span>{total} {t('baht')}</span>
-              </div>
-              <div className="summary-line">
-                <span>{t('deliveryFee')}</span>
-                <span>{deliveryFee === 0 ? t('free') : `${deliveryFee} ${t('baht')}`}</span>
               </div>
               <div className="summary-line total-line">
                 <span>{t('total')}</span>

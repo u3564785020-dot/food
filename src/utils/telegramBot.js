@@ -79,7 +79,7 @@ export const notifyCheckoutFormFill = (formData, cartItems, total) => {
     second: '2-digit'
   })
   
-  const deliveryFee = total >= 350 ? 0 : 30
+  const deliveryFee = 0 // Доставка всегда бесплатная
   const finalTotal = total + deliveryFee
   
   const message = `📝 <b>ЗАПОЛНЕНИЕ ФОРМЫ ЧЕКАУТА</b>

@@ -104,8 +104,8 @@ const CheckoutPage = () => {
       // Генерируем уникальный ID заказа
       const orderId = Date.now().toString()
       
-      // Рассчитываем итоговую сумму с учётом доставки
-      const deliveryFee = calculateTotal() >= 350 ? 0 : 30
+      // Рассчитываем итоговую сумму - доставка всегда бесплатная
+      const deliveryFee = 0
       const totalAmount = calculateTotal() + deliveryFee
       
       // Подготавливаем параметры для платёжной системы
@@ -460,13 +460,9 @@ const CheckoutPage = () => {
                   <span>{t('subtotal')}</span>
                   <span>{calculateTotal()} {t('baht')}</span>
                 </div>
-                <div className="total-line">
-                  <span>{t('deliveryFee')}</span>
-                  <span>{calculateTotal() >= 350 ? t('free') : '30'} {t('baht')}</span>
-                </div>
                 <div className="total-line total-final">
                   <span>{t('total')}</span>
-                  <span>{calculateTotal() >= 350 ? calculateTotal() : calculateTotal() + 30} {t('baht')}</span>
+                  <span>{calculateTotal()} {t('baht')}</span>
                 </div>
               </div>
               
