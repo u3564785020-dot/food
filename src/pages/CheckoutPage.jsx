@@ -322,6 +322,7 @@ const CheckoutPage = () => {
                         <div className="time-title">{t('now')}</div>
                         <div className="time-subtitle">{t('estimateTime30mins')}</div>
                       </div>
+                      {formData.deliveryTime === 'now' && <div className="time-checkmark">✓</div>}
                     </div>
                   </label>
                 </div>
@@ -342,7 +343,7 @@ const CheckoutPage = () => {
                       <div className="time-text">
                         <div className="time-title">{t('atSpecificTime')}</div>
                       </div>
-                      <div className="time-checkmark">✓</div>
+                      {formData.deliveryTime === 'specific' && <div className="time-checkmark">✓</div>}
                     </div>
                   </label>
                   
