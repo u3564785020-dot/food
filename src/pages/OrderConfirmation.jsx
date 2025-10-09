@@ -146,6 +146,10 @@ const OrderConfirmation = () => {
                 <span>{t('subtotal')}</span>
                 <span>{total} {t('baht')}</span>
               </div>
+              <div className="summary-line">
+                <span>{t('deliveryFee')}</span>
+                <span>0 {t('baht')}</span>
+              </div>
               <div className="summary-line total-line">
                 <span>{t('total')}</span>
                 <span>{finalTotal} {t('baht')}</span>

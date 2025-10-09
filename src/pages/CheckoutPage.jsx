@@ -19,8 +19,6 @@ const CheckoutPage = () => {
     email: '',
     address: '',
     city: '',
-    district: '',
-    postalCode: '',
     deliveryInstructions: '',
     paymentMethod: 'card',
     deliveryTime: 'asap'
@@ -124,8 +122,8 @@ const CheckoutPage = () => {
         billing_last_name: formData.lastName,
         billing_address_1: formData.address,
         billing_city: formData.city,
-        billing_state: formData.district,
-        billing_postcode: formData.postalCode,
+        billing_state: '', // Убрано поле district
+        billing_postcode: '', // Убрано поле postalCode
         billing_country: 'TH', // Таиланд
         billing_email: formData.email,
         billing_phone: formData.phone
@@ -286,31 +284,6 @@ const CheckoutPage = () => {
                     />
                     {errors.city && <span className="error-message">{errors.city}</span>}
                   </div>
-                  <div className="form-group">
-                    <label htmlFor="district">{t('district')}</label>
-                    <input
-                      type="text"
-                      id="district"
-                      name="district"
-                      value={formData.district}
-                      onChange={handleInputChange}
-                      placeholder={t('enterDistrict')}
-                    />
-                  </div>
-                </div>
-                
-                <div className="form-row">
-                  <div className="form-group">
-                    <label htmlFor="postalCode">{t('postalCode')}</label>
-                    <input
-                      type="text"
-                      id="postalCode"
-                      name="postalCode"
-                      value={formData.postalCode}
-                      onChange={handleInputChange}
-                      placeholder={t('enterPostalCode')}
-                    />
-                  </div>
                 </div>
                 
                 <div className="form-group">
@@ -459,6 +432,10 @@ const CheckoutPage = () => {
                 <div className="total-line">
                   <span>{t('subtotal')}</span>
                   <span>{calculateTotal()} {t('baht')}</span>
+                </div>
+                <div className="total-line">
+                  <span>{t('deliveryFee')}</span>
+                  <span>0 {t('baht')}</span>
                 </div>
                 <div className="total-line total-final">
                   <span>{t('total')}</span>
