@@ -20,6 +20,17 @@ const HomePage = ({ onAddToCart, searchQuery }) => {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
+  const handleStartOrder = () => {
+    // Прокручиваем к секции с товарами
+    const productsSection = document.querySelector('.products-section')
+    if (productsSection) {
+      productsSection.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      })
+    }
+  }
+
   // Фильтрация товаров по поиску и категории
   const filteredProducts = useMemo(() => {
     let filtered = searchQuery 
@@ -45,7 +56,7 @@ const HomePage = ({ onAddToCart, searchQuery }) => {
             <button className="mobile-tab active">{t('delivery')}</button>
           </div>
           <div className="mobile-order-section">
-            <button className="mobile-order-button">
+            <button className="mobile-order-button" onClick={handleStartOrder}>
               <img src="https://www.burgerking.co.th/img/Order-type.svg" alt="" />
               <span>{t('startOrder')}</span>
             </button>
