@@ -14,7 +14,9 @@ import CookieBanner from './components/CookieBanner'
 import SideMenu from './components/SideMenu'
 import ShoppingCart from './components/ShoppingCart'
 import BottomNavigation from './components/BottomNavigation'
+import LoadingSpinner from './components/LoadingSpinner'
 import { useLanguage } from './context/LanguageContext'
+import { usePageLoader } from './hooks/usePageLoader'
 import { notifySiteEntry } from './utils/telegramBot'
 import './App.css'
 
@@ -25,6 +27,7 @@ function AppContent() {
   const [showMenu, setShowMenu] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const { language } = useLanguage()
+  const { isLoading } = usePageLoader()
   const location = useLocation()
 
   // Устанавливаем язык HTML документа
@@ -50,6 +53,7 @@ function AppContent() {
 
   return (
     <div className={appClassName}>
+      <LoadingSpinner isVisible={isLoading} />
       {showCookie && <CookieBanner onAccept={() => setShowCookie(false)} />}
       <Header 
         cartCount={cartItems.length} 
