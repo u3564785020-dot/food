@@ -194,6 +194,14 @@ export const translations = {
     
     // Rewards Page
     rewards: 'รางวัล',
+    goodMorning: 'สวัสดีตอนเช้า',
+    guest: 'แขก',
+    registerToGetPrivilege: 'ลงทะเบียนเพื่อรับสิทธิประโยชน์',
+    eCouponsAtStore: 'eCoupons ที่ร้าน',
+    specialRedeemAtCashier: 'แลกพิเศษที่แคชเชียร์',
+    dealsAtStore: 'ดีลที่ร้าน',
+    use: 'ใช้',
+    crowns: 'Crowns',
     welcomeToRewards: 'ยินดีต้อนรับสู่โปรแกรมรางวัล',
     rewardsDescription: 'รับสิทธิประโยชน์พิเศษและรางวัลมากมายเมื่อเป็นสมาชิกโปรแกรมรางวัลของเรา',
     freeItems: 'ของฟรี',
@@ -407,6 +415,14 @@ export const translations = {
     
     // Rewards Page
     rewards: 'Rewards',
+    goodMorning: 'Good Morning',
+    guest: 'Guest',
+    registerToGetPrivilege: 'Register to get privilege',
+    eCouponsAtStore: 'eCoupons at store',
+    specialRedeemAtCashier: 'Special redeem at cashier',
+    dealsAtStore: 'Deals at store',
+    use: 'Use',
+    crowns: 'Crowns',
     welcomeToRewards: 'Welcome to Rewards Program',
     rewardsDescription: 'Get exclusive benefits and rewards when you join our rewards program',
     freeItems: 'Free Items',
