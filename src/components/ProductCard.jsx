@@ -75,7 +75,7 @@ const ProductCard = ({ product, onAddToCart }) => {
 
         <div className="product-buttons">
           <button className="product-add-button" onClick={handleAdd}>
-            <span>🛒</span> {language === 'th' ? 'เพิ่ม' : 'Add'}
+            <span>🛒</span> {language === 'th' ? 'เพิ่ม' : 'Select'}
           </button>
         </div>
       </div>

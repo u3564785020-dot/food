@@ -191,7 +191,7 @@ const ProductPage = ({ onAddToCart }) => {
 
             {/* Add to Cart Button */}
             <button className="add-to-cart-button" onClick={handleAddToCart}>
-              {language === 'th' ? 'Add to bag' : 'Add to bag'}
+              {language === 'th' ? 'Add to bag' : 'Select'}
             </button>
           </div>
         </div>
