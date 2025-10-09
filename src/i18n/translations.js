@@ -174,6 +174,11 @@ export const translations = {
     
     // Delivery Time
     deliveryTime: 'เวลาจัดส่ง',
+    selectTime: 'เลือกเวลา',
+    now: 'ตอนนี้',
+    estimateTime30mins: '(ประมาณเวลา 30 นาที)',
+    atSpecificTime: 'ในเวลาที่กำหนด',
+    selectDate: 'เลือกวันที่',
     asSoonAsPossible: 'เร็วที่สุดเท่าที่เป็นไปได้',
     in30Minutes: 'ภายใน 30 นาที',
     in1Hour: 'ภายใน 1 ชั่วโมง',
@@ -363,6 +368,11 @@ export const translations = {
     
     // Delivery Time
     deliveryTime: 'Delivery Time',
+    selectTime: 'Select time',
+    now: 'Now',
+    estimateTime30mins: '(estimate time 30 mins)',
+    atSpecificTime: 'At specific time',
+    selectDate: 'Select date',
     asSoonAsPossible: 'As Soon As Possible',
     in30Minutes: 'In 30 Minutes',
     in1Hour: 'In 1 Hour',

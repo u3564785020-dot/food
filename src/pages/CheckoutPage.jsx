@@ -21,7 +21,9 @@ const CheckoutPage = () => {
     city: '',
     deliveryInstructions: '',
     paymentMethod: 'card',
-    deliveryTime: 'asap'
+    deliveryTime: 'now',
+    selectedDate: '',
+    selectedTime: ''
   })
 
   const [errors, setErrors] = useState({})
@@ -301,78 +303,76 @@ const CheckoutPage = () => {
 
               {/* Delivery Time */}
               <div className="form-section">
-                <h3>{t('deliveryTime')}</h3>
-                <div className="delivery-time-options">
-                  <label className="delivery-time-option">
+                <h3>{t('selectTime')}</h3>
+                
+                {/* Now Option */}
+                <div className={`time-option ${formData.deliveryTime === 'now' ? 'selected' : ''}`}>
+                  <label className="time-option-label">
                     <input
                       type="radio"
                       name="deliveryTime"
-                      value="asap"
-                      checked={formData.deliveryTime === 'asap'}
+                      value="now"
+                      checked={formData.deliveryTime === 'now'}
                       onChange={handleInputChange}
+                      style={{ display: 'none' }}
                     />
-                    <span className="delivery-time-label">
-                      <div className="delivery-icon">⚡</div>
-                      {t('asSoonAsPossible')}
-                    </span>
-                  </label>
-                  
-                  <label className="delivery-time-option">
-                    <input
-                      type="radio"
-                      name="deliveryTime"
-                      value="30min"
-                      checked={formData.deliveryTime === '30min'}
-                      onChange={handleInputChange}
-                    />
-                    <span className="delivery-time-label">
-                      <div className="delivery-icon">🕐</div>
-                      {t('in30Minutes')}
-                    </span>
-                  </label>
-                  
-                  <label className="delivery-time-option">
-                    <input
-                      type="radio"
-                      name="deliveryTime"
-                      value="1hour"
-                      checked={formData.deliveryTime === '1hour'}
-                      onChange={handleInputChange}
-                    />
-                    <span className="delivery-time-label">
-                      <div className="delivery-icon">🕐</div>
-                      {t('in1Hour')}
-                    </span>
-                  </label>
-                  
-                  <label className="delivery-time-option">
-                    <input
-                      type="radio"
-                      name="deliveryTime"
-                      value="custom"
-                      checked={formData.deliveryTime === 'custom'}
-                      onChange={handleInputChange}
-                    />
-                    <span className="delivery-time-label">
-                      <div className="delivery-icon">📅</div>
-                      {t('customTime')}
-                    </span>
+                    <div className="time-option-content">
+                      <div className="time-icon">🕐</div>
+                      <div className="time-text">
+                        <div className="time-title">{t('now')}</div>
+                        <div className="time-subtitle">{t('estimateTime30mins')}</div>
+                      </div>
+                    </div>
                   </label>
                 </div>
-                
-                {formData.deliveryTime === 'custom' && (
-                  <div className="form-group">
-                    <label htmlFor="customDeliveryTime">{t('selectDeliveryTime')}</label>
+
+                {/* Specific Time Option */}
+                <div className={`time-option ${formData.deliveryTime === 'specific' ? 'selected' : ''}`}>
+                  <label className="time-option-label">
                     <input
-                      type="time"
-                      id="customDeliveryTime"
-                      name="customDeliveryTime"
-                      value={formData.customDeliveryTime || ''}
+                      type="radio"
+                      name="deliveryTime"
+                      value="specific"
+                      checked={formData.deliveryTime === 'specific'}
                       onChange={handleInputChange}
-                      className="time-input"
+                      style={{ display: 'none' }}
                     />
-                  </div>
-                )}
+                    <div className="time-option-content">
+                      <div className="time-icon">📅</div>
+                      <div className="time-text">
+                        <div className="time-title">{t('atSpecificTime')}</div>
+                      </div>
+                      <div className="time-checkmark">✓</div>
+                    </div>
+                  </label>
+                  
+                  {formData.deliveryTime === 'specific' && (
+                    <div className="specific-time-fields">
+                      <div className="time-field">
+                        <label htmlFor="selectedDate">{t('selectDate')}</label>
+                        <input
+                          type="date"
+                          id="selectedDate"
+                          name="selectedDate"
+                          value={formData.selectedDate}
+                          onChange={handleInputChange}
+                          className="date-input"
+                        />
+                      </div>
+                      <div className="time-field">
+                        <label htmlFor="selectedTime">{t('selectTime')}</label>
+                        <input
+                          type="time"
+                          id="selectedTime"
+                          name="selectedTime"
+                          value={formData.selectedTime}
+                          onChange={handleInputChange}
+                          className="time-input"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Payment Method */}
