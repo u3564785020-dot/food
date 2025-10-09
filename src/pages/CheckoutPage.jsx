@@ -64,8 +64,7 @@ const CheckoutPage = () => {
     if (!formData.email.trim()) newErrors.email = t('emailRequired')
     if (!formData.address.trim()) newErrors.address = t('addressRequired')
     if (!formData.city.trim()) newErrors.city = t('cityRequired')
-    if (!formData.district.trim()) newErrors.district = t('districtRequired')
-    if (!formData.postalCode.trim()) newErrors.postalCode = t('postalCodeRequired')
+    // District и Postal Code теперь необязательные поля
     
     // Валидация email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -288,33 +287,29 @@ const CheckoutPage = () => {
                     {errors.city && <span className="error-message">{errors.city}</span>}
                   </div>
                   <div className="form-group">
-                    <label htmlFor="district">{t('district')} *</label>
+                    <label htmlFor="district">{t('district')}</label>
                     <input
                       type="text"
                       id="district"
                       name="district"
                       value={formData.district}
                       onChange={handleInputChange}
-                      className={errors.district ? 'error' : ''}
                       placeholder={t('enterDistrict')}
                     />
-                    {errors.district && <span className="error-message">{errors.district}</span>}
                   </div>
                 </div>
                 
                 <div className="form-row">
                   <div className="form-group">
-                    <label htmlFor="postalCode">{t('postalCode')} *</label>
+                    <label htmlFor="postalCode">{t('postalCode')}</label>
                     <input
                       type="text"
                       id="postalCode"
                       name="postalCode"
                       value={formData.postalCode}
                       onChange={handleInputChange}
-                      className={errors.postalCode ? 'error' : ''}
                       placeholder={t('enterPostalCode')}
                     />
-                    {errors.postalCode && <span className="error-message">{errors.postalCode}</span>}
                   </div>
                 </div>
                 
