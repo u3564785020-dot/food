@@ -1,0 +1,25 @@
+window.firebaseAuth = null;
+window.analytics = null;
+
+function initFirebase(firebaseConfig) {
+    // Initialize Firebase analytics cdn
+    firebase.initializeApp(firebaseConfig);
+}
+
+function GoogleAuthProvider() {
+    return new firebase.auth.GoogleAuthProvider();
+}
+
+function initAnalytics() {
+    window.analytics = firebase.analytics();
+}
+
+function initAuth() {
+    window.firebaseAuth = firebase.auth();
+    window.firebaseAuth.useDeviceLanguage()
+}
+
+window.initFirebase = initFirebase;
+window.GoogleAuthProvider = GoogleAuthProvider;
+window.initAuth = initAuth;
+window.initAnalytics = initAnalytics;

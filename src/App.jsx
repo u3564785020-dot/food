@@ -8,6 +8,7 @@ import OrderConfirmation from './pages/OrderConfirmation'
 import MorePage from './pages/MorePage'
 import MyOrderPage from './pages/MyOrderPage'
 import EarnPointPage from './pages/EarnPointPage'
+import RewardsPage from './pages/RewardsPage'
 import Footer from './components/Footer'
 import CookieBanner from './components/CookieBanner'
 import SideMenu from './components/SideMenu'
@@ -71,6 +72,7 @@ function AppContent() {
         <Route path="/more" element={<MorePage />} />
         <Route path="/my-order" element={<MyOrderPage />} />
         <Route path="/earn-point" element={<EarnPointPage />} />
+        <Route path="/reward" element={<RewardsPage />} />
       </Routes>
       <Footer />
       {location.pathname !== '/checkout' && <BottomNavigation />}

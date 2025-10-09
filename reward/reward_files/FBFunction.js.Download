@@ -1,0 +1,29 @@
+var FBFunction = {
+    getLoginStatus: function (statusChangeCallback) {
+        FB.getLoginStatus(function(response) {
+            statusChangeCallback(response);
+        });
+    },
+
+    login: function (callback) {
+        FB.login(function (response) {
+            callback(response);
+            console.log('login response', response);
+        }, {scope: 'public_profile,email'});
+    },
+
+    logout: function (callback) {
+        FB.logout(function (response) {
+            callback(response);
+        });
+    },
+
+    getFbProfile: function (callback) {
+        let request = {
+            fields: 'email,first_name,last_name,gender,birthday',
+        };
+        FB.api('/me', request, callback);
+    },
+};
+
+window.FBFunction = FBFunction;

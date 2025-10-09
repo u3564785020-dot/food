@@ -41,7 +41,7 @@ const BottomNavigation = () => {
           />
         </svg>
       ),
-      path: '/rewards'
+      path: '/reward'
     },
     {
       id: 'earn-point',

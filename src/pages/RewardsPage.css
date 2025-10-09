@@ -1,0 +1,264 @@
+/* Rewards Page Styles */
+.rewards-page {
+  min-height: 100vh;
+  background-color: #F8F5ED;
+  padding: 2rem 1rem;
+}
+
+.rewards-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header Section */
+.rewards-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.rewards-icon {
+  margin-bottom: 1rem;
+}
+
+.ribbon-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #FF6600, #FF4500);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  position: relative;
+  box-shadow: 0 4px 15px rgba(255, 102, 0, 0.3);
+}
+
+.ribbon-icon::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+  background: #FF6600;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.ribbon-icon::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-top: 20px solid #FF4500;
+  z-index: 0;
+}
+
+.crown-icon {
+  font-size: 24px;
+  color: white;
+  z-index: 2;
+  position: relative;
+}
+
+.rewards-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #FF6600, #FF4500);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
+  text-align: center;
+}
+
+/* Content Section */
+.rewards-content {
+  background: white;
+  border-radius: 20px;
+  padding: 3rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.rewards-intro {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.rewards-intro h2 {
+  font-size: 2rem;
+  color: #5C3A21;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.rewards-intro p {
+  font-size: 1.1rem;
+  color: #666;
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Rewards Cards */
+.rewards-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.reward-card {
+  background: #F8F5ED;
+  border-radius: 15px;
+  padding: 2rem;
+  text-align: center;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.reward-card:hover {
+  border-color: #FF6600;
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(255, 102, 0, 0.15);
+}
+
+.reward-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.reward-card h3 {
+  font-size: 1.5rem;
+  color: #5C3A21;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.reward-card p {
+  color: #666;
+  line-height: 1.5;
+}
+
+/* How It Works */
+.how-it-works {
+  margin-bottom: 3rem;
+}
+
+.how-it-works h2 {
+  font-size: 2rem;
+  color: #5C3A21;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-weight: 600;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.step-number {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #FF6600, #FF4500);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.step-content h3 {
+  font-size: 1.3rem;
+  color: #5C3A21;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.step-content p {
+  color: #666;
+  line-height: 1.5;
+}
+
+/* Join Section */
+.join-section {
+  text-align: center;
+}
+
+.join-rewards-btn {
+  background: linear-gradient(135deg, #FF6600, #FF4500);
+  color: white;
+  border: none;
+  padding: 1rem 3rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(255, 102, 0, 0.3);
+}
+
+.join-rewards-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 102, 0, 0.4);
+}
+
+.join-rewards-btn:active {
+  transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .rewards-page {
+    padding: 1rem 0.5rem;
+  }
+
+  .rewards-content {
+    padding: 2rem 1.5rem;
+  }
+
+  .rewards-title {
+    font-size: 2rem;
+  }
+
+  .rewards-intro h2 {
+    font-size: 1.5rem;
+  }
+
+  .rewards-cards {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .steps {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .step {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .join-rewards-btn {
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+  }
+}

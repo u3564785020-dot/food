@@ -190,7 +190,26 @@ export const translations = {
     paymentSuccessMessage: 'การชำระเงินของคุณสำเร็จแล้ว เราจะจัดส่งให้คุณเร็วที่สุด',
     paymentFailed: 'ชำระเงินไม่สำเร็จ',
     paymentFailedMessage: 'ขออภัย การชำระเงินไม่สำเร็จ กรุณาลองใหม่อีกครั้ง',
-    retryPayment: 'ลองชำระเงินอีกครั้ง'
+    retryPayment: 'ลองชำระเงินอีกครั้ง',
+    
+    // Rewards Page
+    rewards: 'รางวัล',
+    welcomeToRewards: 'ยินดีต้อนรับสู่โปรแกรมรางวัล',
+    rewardsDescription: 'รับสิทธิประโยชน์พิเศษและรางวัลมากมายเมื่อเป็นสมาชิกโปรแกรมรางวัลของเรา',
+    freeItems: 'ของฟรี',
+    freeItemsDescription: 'รับของฟรีเมื่อสั่งซื้อครบตามเงื่อนไข',
+    exclusiveOffers: 'ข้อเสนอพิเศษ',
+    exclusiveOffersDescription: 'สิทธิ์เข้าถึงข้อเสนอและโปรโมชั่นพิเศษสำหรับสมาชิกเท่านั้น',
+    specialEvents: 'กิจกรรมพิเศษ',
+    specialEventsDescription: 'เข้าร่วมกิจกรรมและงานพิเศษที่จัดขึ้นสำหรับสมาชิก',
+    howItWorks: 'วิธีการทำงาน',
+    step1Title: 'สมัครสมาชิก',
+    step1Description: 'สมัครเป็นสมาชิกโปรแกรมรางวัลของเรา',
+    step2Title: 'สั่งซื้อและสะสมคะแนน',
+    step2Description: 'สั่งซื้ออาหารและสะสมคะแนนในทุกการสั่งซื้อ',
+    step3Title: 'แลกรางวัล',
+    step3Description: 'ใช้คะแนนแลกรางวัลและสิทธิประโยชน์ต่างๆ',
+    joinRewards: 'สมัครสมาชิกตอนนี้'
   },
   
   en: {
@@ -384,7 +403,26 @@ export const translations = {
     paymentSuccessMessage: 'Your payment has been processed successfully. We will deliver your order as soon as possible.',
     paymentFailed: 'Payment Failed',
     paymentFailedMessage: 'Sorry, your payment could not be processed. Please try again.',
-    retryPayment: 'Retry Payment'
+    retryPayment: 'Retry Payment',
+    
+    // Rewards Page
+    rewards: 'Rewards',
+    welcomeToRewards: 'Welcome to Rewards Program',
+    rewardsDescription: 'Get exclusive benefits and rewards when you join our rewards program',
+    freeItems: 'Free Items',
+    freeItemsDescription: 'Get free items when you meet purchase requirements',
+    exclusiveOffers: 'Exclusive Offers',
+    exclusiveOffersDescription: 'Access to special offers and promotions for members only',
+    specialEvents: 'Special Events',
+    specialEventsDescription: 'Join special events and activities for members',
+    howItWorks: 'How It Works',
+    step1Title: 'Sign Up',
+    step1Description: 'Join our rewards program',
+    step2Title: 'Order & Earn Points',
+    step2Description: 'Order food and earn points with every purchase',
+    step3Title: 'Redeem Rewards',
+    step3Description: 'Use your points to redeem rewards and benefits',
+    joinRewards: 'Join Now'
   }
 }
 
