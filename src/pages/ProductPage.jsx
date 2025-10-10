@@ -44,7 +44,8 @@ const ProductPage = ({ onAddToCart }) => {
   const handleAddToCart = () => {
     const item = {
       ...product,
-      price: discount.newPrice,
+      price: discount.newPrice * quantity,
+      unitPrice: discount.newPrice,
       originalPrice: discount.originalPrice,
       discountPercent: discount.discountPercent,
       selectedMeat,

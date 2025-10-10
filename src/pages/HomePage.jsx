@@ -85,7 +85,7 @@ const HomePage = ({ onAddToCart, searchQuery }) => {
           )}
           <div className="products-grid">
             {displayProducts.map((product) => (
-              <ProductCard key={product.id} product={product} onAddToCart={onAddToCart} />
+              <ProductCard key={product.id} product={product} />
             ))}
           </div>
         </div>

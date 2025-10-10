@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import './ShoppingCart.css'
 
-const ShoppingCart = ({ show, onClose, items }) => {
+const ShoppingCart = ({ show, onClose, items, onRemoveItem }) => {
   const navigate = useNavigate()
   const { language, t } = useLanguage()
   const total = items.reduce((sum, item) => sum + item.price, 0)
@@ -42,8 +42,18 @@ const ShoppingCart = ({ show, onClose, items }) => {
                       <img src={item.image} alt={itemName} className="cart-item-image" />
                       <div className="cart-item-info">
                         <div className="cart-item-name">{itemName}</div>
-                        <div className="cart-item-price">{item.price} {t('baht')}</div>
+                        <div className="cart-item-details">
+                          <span className="cart-item-quantity">x{item.quantity}</span>
+                          <span className="cart-item-price">{item.price} {t('baht')}</span>
+                        </div>
                       </div>
+                      <button 
+                        className="cart-item-remove" 
+                        onClick={() => onRemoveItem(index)}
+                        title={language === 'th' ? 'ลบ' : 'Remove'}
+                      >
+                        <img src="https://www.burgerking.co.th/img/ic-close-brown.svg" alt="Remove" />
+                      </button>
                     </div>
                   )
                 })}

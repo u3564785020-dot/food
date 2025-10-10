@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import './ProductCard.css'
 
-const ProductCard = ({ product, onAddToCart }) => {
+const ProductCard = ({ product }) => {
   const { t, language } = useLanguage()
   const navigate = useNavigate()
   
@@ -35,16 +35,9 @@ const ProductCard = ({ product, onAddToCart }) => {
     navigate(`/product/${product.id}`)
   }
 
-  const handleAdd = (e) => {
+  const handleButtonClick = (e) => {
     e.stopPropagation()
-    // Создаем продукт с новой ценой для добавления в корзину
-    const productWithNewPrice = {
-      ...product,
-      price: discount.newPrice,
-      originalPrice: discount.originalPrice,
-      discountPercent: discount.discountPercent
-    }
-    onAddToCart(productWithNewPrice)
+    navigate(`/product/${product.id}`)
   }
 
   return (
@@ -74,8 +67,8 @@ const ProductCard = ({ product, onAddToCart }) => {
         </div>
 
         <div className="product-buttons">
-          <button className="product-add-button" onClick={handleAdd}>
-            {language === 'th' ? 'เพิ่ม' : 'Select'}
+          <button className="product-add-button" onClick={handleButtonClick}>
+            {language === 'th' ? 'เลือก' : 'Select'}
           </button>
         </div>
       </div>

@@ -423,7 +423,10 @@ const CheckoutPage = () => {
                     </div>
                     <div className="item-details">
                       <h4>{item.name_en}</h4>
-                      <p className="item-price">{item.price} {t('baht')}</p>
+                      <div className="item-quantity-price">
+                        <span className="item-quantity">x{item.quantity}</span>
+                        <p className="item-price">{item.price} {t('baht')}</p>
+                      </div>
                     </div>
                   </div>
                 ))}

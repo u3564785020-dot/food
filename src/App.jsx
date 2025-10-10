@@ -48,6 +48,10 @@ function AppContent() {
     setCartItems([...cartItems, item])
   }
 
+  const removeFromCart = (index) => {
+    setCartItems(cartItems.filter((_, i) => i !== index))
+  }
+
   // Определяем класс для app в зависимости от текущей страницы
   const appClassName = location.pathname === '/checkout' ? 'app checkout-page' : 'app'
 
@@ -67,6 +71,7 @@ function AppContent() {
         show={showCart} 
         onClose={() => setShowCart(false)} 
         items={cartItems}
+        onRemoveItem={removeFromCart}
       />
       <Routes>
         <Route path="/" element={<HomePage onAddToCart={addToCart} searchQuery={searchQuery} />} />
