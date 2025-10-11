@@ -229,6 +229,106 @@
   justify-content: center;
 }
 
+/* Time Selection Styles */
+.time-option {
+  background: white;
+  border: 2px solid var(--color-brown-border);
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.time-option:hover {
+  border-color: var(--color-orange);
+  background-color: rgba(255, 102, 0, 0.02);
+}
+
+.time-option.selected {
+  border-color: var(--color-orange);
+  background-color: rgba(255, 102, 0, 0.05);
+}
+
+.time-option-label {
+  cursor: pointer;
+  display: block;
+  width: 100%;
+}
+
+.time-option-content {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  gap: 0.75rem;
+  position: relative;
+}
+
+.time-icon {
+  font-size: 24px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.time-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.time-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-brown-dark);
+  margin-bottom: 0.25rem;
+}
+
+.time-subtitle {
+  font-size: 13px;
+  color: #666;
+}
+
+.time-checkmark {
+  color: var(--color-orange);
+  font-size: 20px;
+  font-weight: bold;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.time-input-wrapper {
+  padding: 0 1rem 1rem 1rem;
+  border-top: 1px solid var(--color-brown-border);
+}
+
+.time-input-wrapper label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-brown-dark);
+  margin-bottom: 0.5rem;
+  margin-top: 1rem;
+}
+
+.time-input-wrapper input[type="time"] {
+  width: 100%;
+  padding: 10px 14px;
+  border: 2px solid var(--color-brown-border);
+  border-radius: 8px;
+  font-size: 15px;
+  background-color: var(--color-egg);
+  color: var(--color-brown-dark);
+  transition: border-color 0.2s;
+}
+
+.time-input-wrapper input[type="time"]:focus {
+  outline: none;
+  border-color: var(--color-orange);
+}
+
 /* Custom time input styling */
 .time-input {
   color-scheme: light;
@@ -371,28 +471,32 @@
 }
 
 .total-line {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
   align-items: center;
+  gap: 0.75rem;
   margin-bottom: 0.75rem;
-  font-size: 16px;
-  gap: 1rem;
+  font-size: 15px;
 }
 
-.total-line span:first-child {
-  flex: 1;
+.total-label {
   text-align: left;
   font-weight: 500;
   color: var(--color-brown-dark);
 }
 
-.total-line span:last-child {
-  flex-shrink: 0;
+.total-amount {
   text-align: right;
   font-weight: 600;
   color: var(--color-brown-dark);
-  white-space: nowrap;
-  min-width: 80px;
+  min-width: 50px;
+}
+
+.total-currency {
+  text-align: left;
+  font-weight: 600;
+  color: var(--color-brown-dark);
+  min-width: 40px;
 }
 
 .total-line:last-child {
@@ -400,15 +504,18 @@
 }
 
 .total-final {
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 700;
   color: var(--color-brown-dark);
   padding-top: 0.75rem;
+  margin-top: 0.5rem;
   border-top: 1px solid var(--color-brown-border);
 }
 
-.total-final span {
-  font-weight: 700 !important;
+.total-final .total-label,
+.total-final .total-amount,
+.total-final .total-currency {
+  font-weight: 700;
 }
 
 .empty-cart {
@@ -452,6 +559,7 @@
   .checkout-container {
     padding: 0.5rem;
     max-width: 100%;
+    box-sizing: border-box;
   }
   
   .checkout-header {
@@ -476,16 +584,19 @@
   
   .checkout-form-section,
   .order-summary {
-    padding: 1.25rem;
+    padding: 1rem;
     border-radius: 12px;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
   }
   
   .form-section {
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
   }
   
   .form-section h3 {
-    font-size: 18px;
+    font-size: 17px;
     margin-bottom: 1rem;
   }
   
@@ -505,8 +616,10 @@
   
   .form-group input,
   .form-group textarea {
-    padding: 10px 14px;
+    padding: 10px 12px;
     font-size: 15px;
+    width: 100%;
+    box-sizing: border-box;
   }
   
   .order-summary-section {
@@ -514,7 +627,7 @@
   }
   
   .order-summary h3 {
-    font-size: 18px;
+    font-size: 17px;
     margin-bottom: 1rem;
   }
   
@@ -533,9 +646,15 @@
     flex-shrink: 0;
   }
   
+  .item-details {
+    flex: 1;
+    min-width: 0;
+  }
+  
   .item-details h4 {
     font-size: 13px;
     line-height: 1.3;
+    word-wrap: break-word;
   }
   
   .item-price {
@@ -547,13 +666,59 @@
   }
   
   .total-line {
+    gap: 0.5rem;
     margin-bottom: 0.6rem;
-    font-size: 15px;
+    font-size: 14px;
+  }
+  
+  .total-amount {
+    min-width: 40px;
+  }
+  
+  .total-currency {
+    min-width: 35px;
   }
   
   .total-final {
-    font-size: 17px;
+    font-size: 16px;
     padding-top: 0.6rem;
+  }
+  
+  /* Time option mobile */
+  .time-option-content {
+    padding: 0.85rem;
+  }
+  
+  .time-icon {
+    font-size: 20px;
+    width: 35px;
+    height: 35px;
+  }
+  
+  .time-title {
+    font-size: 15px;
+  }
+  
+  .time-subtitle {
+    font-size: 12px;
+  }
+  
+  .time-checkmark {
+    font-size: 18px;
+  }
+  
+  .time-input-wrapper {
+    padding: 0 0.85rem 0.85rem;
+  }
+  
+  .time-input-wrapper label {
+    font-size: 13px;
+    margin-top: 0.75rem;
+  }
+  
+  .time-input-wrapper input[type="time"] {
+    padding: 9px 12px;
+    font-size: 14px;
   }
   
   /* BUTTONS ON MOBILE */
@@ -570,6 +735,7 @@
     padding: 14px 20px !important;
     font-size: 16px !important;
     border-radius: 10px !important;
+    box-sizing: border-box !important;
   }
   
   .payment-section {
