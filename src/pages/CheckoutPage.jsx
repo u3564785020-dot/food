@@ -101,51 +101,27 @@ const CheckoutPage = () => {
 
   const handleProceedToPayment = () => {
     if (validateForm()) {
-      // Генерируем уникальный ID заказа
-      const orderId = Date.now().toString()
-      
       // Рассчитываем итоговую сумму - доставка всегда бесплатная
       const deliveryFee = 0
       const totalAmount = calculateTotal() + deliveryFee
       
-      // Подготавливаем параметры для платёжной системы
-      const paymentParams = new URLSearchParams({
-        site: 'emergencyrelief.center',
-        icon: 'https://s6.imgcdn.dev/8xixd.png',
-        image: 'https://s6.imgcdn.dev/8xQsM.png',
-        amount: totalAmount.toString(),
-        symbol: 'THB',
-        vat: '0',
-        riderect_success: `${window.location.origin}/order-confirmation?status=success&order_id=${orderId}`,
-        riderect_failed: `${window.location.origin}/order-confirmation?status=failed&order_id=${orderId}`,
-        riderect_back: `${window.location.origin}/checkout`,
-        order_id: orderId,
-        billing_first_name: formData.firstName,
-        billing_last_name: formData.lastName,
-        billing_address_1: formData.address,
-        billing_city: formData.city,
-        billing_state: '', // Убрано поле district
-        billing_postcode: '', // Убрано поле postalCode
-        billing_country: 'TH', // Таиланд
-        billing_email: formData.email,
-        billing_phone: formData.phone
-      })
-      
-      // Сохраняем данные заказа в localStorage для последующего использования
+      // Подготавливаем данные заказа
       const orderData = {
-        orderId,
         formData,
         cartItems,
+        subtotal: calculateTotal(),
         total: totalAmount,
         deliveryFee,
         timestamp: new Date().toISOString()
       }
-      localStorage.setItem(`order_${orderId}`, JSON.stringify(orderData))
       
-      // Отправляем уведомление о переходе на платёжную систему
-      notifyPaymentRedirect(orderId, totalAmount)
+      // Сохраняем временные данные заказа
+      localStorage.setItem('pendingOrder', JSON.stringify(orderData))
       
-      // Meta Pixel событие - Lead при переходе на платёжную систему
+      // Отправляем уведомление о переходе на платёжную страницу
+      notifyPaymentRedirect(Date.now().toString(), totalAmount)
+      
+      // Meta Pixel событие - Lead при переходе на страницу оплаты
       if (typeof fbq !== 'undefined') {
         fbq('track', 'Lead', {
           value: totalAmount,
@@ -156,9 +132,8 @@ const CheckoutPage = () => {
         })
       }
       
-      // Перенаправляем на платёжную систему
-      const paymentUrl = `https://emergencyrelief.center/connect/form?${paymentParams.toString()}`
-      window.location.href = paymentUrl
+      // Переходим на встроенную страницу оплаты
+      navigate('/payment', { state: { orderData } })
     }
   }
 

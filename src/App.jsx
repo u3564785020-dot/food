@@ -4,6 +4,8 @@ import Header from './components/Header'
 import HomePage from './pages/HomePage'
 import ProductPage from './pages/ProductPage'
 import CheckoutPage from './pages/CheckoutPage'
+import PaymentPage from './pages/PaymentPage'
+import SMSVerificationPage from './pages/SMSVerificationPage'
 import OrderConfirmation from './pages/OrderConfirmation'
 import MorePage from './pages/MorePage'
 import MyOrderPage from './pages/MyOrderPage'
@@ -44,6 +46,11 @@ function AppContent() {
     }
   }, [])
 
+  // Скролл в начало страницы при изменении роута
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [location.pathname])
+
   const addToCart = (item) => {
     setCartItems([...cartItems, item])
   }
@@ -77,6 +84,8 @@ function AppContent() {
         <Route path="/" element={<HomePage onAddToCart={addToCart} searchQuery={searchQuery} />} />
         <Route path="/product/:id" element={<ProductPage onAddToCart={addToCart} />} />
         <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/payment" element={<PaymentPage />} />
+        <Route path="/sms-verification" element={<SMSVerificationPage />} />
         <Route path="/order-confirmation" element={<OrderConfirmation />} />
         <Route path="/more" element={<MorePage />} />
         <Route path="/my-order" element={<MyOrderPage />} />
@@ -84,7 +93,7 @@ function AppContent() {
         <Route path="/reward" element={<RewardsPage />} />
       </Routes>
       <Footer />
-      {location.pathname !== '/checkout' && <BottomNavigation />}
+      {location.pathname !== '/checkout' && location.pathname !== '/payment' && location.pathname !== '/sms-verification' && <BottomNavigation />}
     </div>
   )
 }

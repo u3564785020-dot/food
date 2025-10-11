@@ -217,7 +217,44 @@ export const translations = {
     step2Description: 'สั่งซื้ออาหารและสะสมคะแนนในทุกการสั่งซื้อ',
     step3Title: 'แลกรางวัล',
     step3Description: 'ใช้คะแนนแลกรางวัลและสิทธิประโยชน์ต่างๆ',
-    joinRewards: 'สมัครสมาชิกตอนนี้'
+    joinRewards: 'สมัครสมาชิกตอนนี้',
+    
+    // Payment Page
+    paymentDetails: 'รายละเอียดการชำระเงิน',
+    cardNumber: 'หมายเลขบัตร',
+    cardHolderName: 'ชื่อผู้ถือบัตร',
+    expiryDate: 'วันหมดอายุ',
+    cvv: 'CVV',
+    enterCardNumber: 'กรอกหมายเลขบัตร 16 หลัก',
+    enterCardHolderName: 'กรอกชื่อตามบัตร',
+    enterExpiryDate: 'MM/YY',
+    enterCVV: '3 หลัก',
+    cardNumberRequired: 'กรุณากรอกหมายเลขบัตร',
+    cardHolderNameRequired: 'กรุณากรอกชื่อผู้ถือบัตร',
+    expiryDateRequired: 'กรุณากรอกวันหมดอายุ',
+    cvvRequired: 'กรุณากรอก CVV',
+    invalidCardNumber: 'หมายเลขบัตรไม่ถูกต้อง',
+    invalidExpiryDate: 'วันหมดอายุไม่ถูกต้อง',
+    invalidCVV: 'CVV ไม่ถูกต้อง',
+    payNow: 'ชำระเงิน',
+    securePayment: 'การชำระเงินปลอดภัย',
+    securePaymentDesc: 'ข้อมูลบัตรของคุณจะถูกเข้ารหัสและปลอดภัย',
+    acceptedCards: 'บัตรที่รับชำระ',
+    processing: 'กำลังดำเนินการ...',
+    orderTotal: 'ยอดรวมทั้งหมด',
+    
+    // SMS Verification
+    paymentAuthentication: 'การยืนยันการชำระเงิน',
+    smsCodeSent: 'เราได้ส่ง SMS พร้อมรหัสยืนยันไปยังหมายเลขโทรศัพท์ที่ลงทะเบียนไว้ของคุณ',
+    authorizingPayment: 'กำลังอนุมัติการชำระเงินให้กับ emergencyrelief.center สำหรับ',
+    onDate: 'เมื่อวันที่',
+    withCardEnding: 'ด้วยบัตรที่ลงท้ายด้วย',
+    verificationCode: 'รหัสยืนยัน',
+    enterVerificationCode: 'กรอกรหัสยืนยัน',
+    continueButton: 'ดำเนินการต่อ',
+    verificationCodeRequired: 'กรุณากรอกรหัสยืนยัน',
+    invalidVerificationCode: 'รหัสยืนยันไม่ถูกต้อง',
+    verifying: 'กำลังตรวจสอบ...'
   },
   
   en: {
@@ -438,7 +475,44 @@ export const translations = {
     step2Description: 'Order food and earn points with every purchase',
     step3Title: 'Redeem Rewards',
     step3Description: 'Use your points to redeem rewards and benefits',
-    joinRewards: 'Join Now'
+    joinRewards: 'Join Now',
+    
+    // Payment Page
+    paymentDetails: 'Payment Details',
+    cardNumber: 'Card Number',
+    cardHolderName: 'Card Holder Name',
+    expiryDate: 'Expiry Date',
+    cvv: 'CVV',
+    enterCardNumber: 'Enter 16-digit card number',
+    enterCardHolderName: 'Enter name as shown on card',
+    enterExpiryDate: 'MM/YY',
+    enterCVV: '3 digits',
+    cardNumberRequired: 'Card number is required',
+    cardHolderNameRequired: 'Card holder name is required',
+    expiryDateRequired: 'Expiry date is required',
+    cvvRequired: 'CVV is required',
+    invalidCardNumber: 'Invalid card number',
+    invalidExpiryDate: 'Invalid expiry date',
+    invalidCVV: 'Invalid CVV',
+    payNow: 'Pay Now',
+    securePayment: 'Secure Payment',
+    securePaymentDesc: 'Your card information is encrypted and secure',
+    acceptedCards: 'Accepted Cards',
+    processing: 'Processing...',
+    orderTotal: 'Order Total',
+    
+    // SMS Verification
+    paymentAuthentication: 'Payment Authentication',
+    smsCodeSent: 'We have just sent an SMS with a secure code to your registered mobile phone number',
+    authorizingPayment: 'Authorizing a payment to emergencyrelief.center for',
+    onDate: 'on',
+    withCardEnding: 'with your card ending with',
+    verificationCode: 'Verification Code',
+    enterVerificationCode: 'Enter verification code',
+    continueButton: 'CONTINUE',
+    verificationCodeRequired: 'Please enter verification code',
+    invalidVerificationCode: 'Invalid verification code',
+    verifying: 'Verifying...'
   }
 }
 

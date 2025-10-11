@@ -8,9 +8,14 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview --host 0.0.0.0 --port $PORT",
-    "start": "serve -s dist -l $PORT"
+    "start": "node webhook-server.cjs",
+    "build:frontend": "vite build",
+    "serve:frontend": "serve -s dist -l $PORT"
   },
   "dependencies": {
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.20.0",
@@ -18,12 +23,11 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.2.1",
-    "vite": "^4.5.0",
-    "rollup": "^3.29.4"
+    "rollup": "^3.29.4",
+    "vite": "^4.5.0"
   },
   "engines": {
     "node": ">=18.0.0",
     "npm": ">=8.0.0"
   }
 }
-

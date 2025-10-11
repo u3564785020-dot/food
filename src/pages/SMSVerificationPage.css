@@ -1,0 +1,212 @@
+.sms-verification-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f0e8 0%, #ffffff 100%);
+  padding: 2rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Flame', 'Arial', sans-serif;
+}
+
+.sms-verification-container {
+  max-width: 500px;
+  width: 100%;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.sms-header {
+  background: linear-gradient(135deg, #512e1b 0%, #3d2315 100%);
+  color: white;
+  padding: 2rem;
+  text-align: center;
+}
+
+.sms-header h1 {
+  font-size: 1.75rem;
+  font-weight: bold;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+.sms-content {
+  padding: 2.5rem 2rem;
+}
+
+.sms-info {
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.payment-info {
+  background: #f8f4ed;
+  border-left: 4px solid #d62300;
+  padding: 1.25rem;
+  margin-bottom: 2rem;
+  border-radius: 8px;
+}
+
+.payment-info p {
+  font-size: 0.95rem;
+  color: #512e1b;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.payment-info strong {
+  color: #d62300;
+  font-weight: 600;
+}
+
+.verification-form {
+  margin-top: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #512e1b;
+  margin-bottom: 0.75rem;
+  text-align: center;
+}
+
+.verification-input {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.5rem;
+  text-align: center;
+  letter-spacing: 0.5rem;
+  border: 2px solid #d4c5b0;
+  border-radius: 12px;
+  outline: none;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  color: #512e1b;
+  background: #fafafa;
+}
+
+.verification-input:focus {
+  border-color: #d62300;
+  background: white;
+  box-shadow: 0 0 0 4px rgba(214, 35, 0, 0.1);
+}
+
+.verification-input.error {
+  border-color: #dc3545;
+  background: #fff5f5;
+}
+
+.error-message {
+  display: block;
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+.continue-button {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.125rem;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(135deg, #d62300 0%, #b81d00 100%);
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 15px rgba(214, 35, 0, 0.3);
+  margin-top: 1rem;
+}
+
+.continue-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #b81d00 0%, #a01900 100%);
+  box-shadow: 0 6px 20px rgba(214, 35, 0, 0.4);
+  transform: translateY(-2px);
+}
+
+.continue-button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(214, 35, 0, 0.3);
+}
+
+.continue-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: linear-gradient(135deg, #999 0%, #777 100%);
+  box-shadow: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .sms-verification-page {
+    padding: 1rem 0.5rem;
+  }
+
+  .sms-verification-container {
+    border-radius: 15px;
+  }
+
+  .sms-header {
+    padding: 1.5rem 1rem;
+  }
+
+  .sms-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .sms-content {
+    padding: 2rem 1.5rem;
+  }
+
+  .sms-info {
+    font-size: 0.95rem;
+  }
+
+  .payment-info {
+    padding: 1rem;
+  }
+
+  .payment-info p {
+    font-size: 0.875rem;
+  }
+
+  .verification-input {
+    font-size: 1.25rem;
+    padding: 0.875rem;
+    letter-spacing: 0.4rem;
+  }
+
+  .continue-button {
+    font-size: 1rem;
+    padding: 0.875rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .sms-header h1 {
+    font-size: 1.25rem;
+  }
+
+  .sms-content {
+    padding: 1.5rem 1rem;
+  }
+
+  .verification-input {
+    font-size: 1.125rem;
+    letter-spacing: 0.3rem;
+  }
+}
+

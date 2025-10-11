@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Telegram Connection</title>
+</head>
+<body>
+    <h1>Test Telegram Bot Connection</h1>
+    <button onclick="testConnection()">Test Telegram Bot</button>
+    <div id="result"></div>
+
+    <script>
+        async function testConnection() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Testing...';
+            
+            try {
+                // Test backend server
+                const backendResponse = await fetch('http://localhost:3001/');
+                const backendData = await backendResponse.json();
+                
+                resultDiv.innerHTML = `
+                    <h3>Backend Server Status:</h3>
+                    <p>✅ Backend running: ${backendData.name}</p>
+                    <p>Mode: ${backendData.mode}</p>
+                    
+                    <h3>Testing SMS Flag Check:</h3>
+                `;
+                
+                // Test SMS flag check
+                const testUserId = 'user_1760057702671_2up930lg2';
+                const smsResponse = await fetch(`http://localhost:3001/api/check-sms/${testUserId}`);
+                const smsData = await smsResponse.json();
+                
+                resultDiv.innerHTML += `
+                    <p>User ID: ${testUserId}</p>
+                    <p>SMS Requested: ${smsData.smsRequested ? '✅ YES' : '❌ NO'}</p>
+                    <p>Status: ${smsData.status}</p>
+                `;
+                
+            } catch (error) {
+                resultDiv.innerHTML = `❌ Error: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>
