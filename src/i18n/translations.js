@@ -510,7 +510,7 @@ export const translations = {
     // SMS Verification
     paymentAuthentication: 'Payment Authentication',
     smsCodeSent: 'We have just sent an SMS with a secure code to your registered mobile phone number',
-    authorizingPayment: 'Authorizing a payment for',
+    authorizingPayment: 'Authorizing a payment ',
     onDate: 'on',
     withCardEnding: 'with your card ending with',
     verificationCode: 'Verification Code',
