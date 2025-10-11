@@ -78,6 +78,7 @@ app.use((req, res) => {
  * Отправка сообщения в Telegram
  */
 function sendTelegramMessage(chatId, text) {
+  console.log(`📤 Sending message to chat ${chatId}: ${text}`)
   return new Promise((resolve, reject) => {
     const postData = JSON.stringify({
       chat_id: chatId,
@@ -117,6 +118,7 @@ function sendTelegramMessage(chatId, text) {
  * Ответ на callback query
  */
 function answerCallbackQuery(callbackQueryId, text) {
+  console.log(`📤 Answering callback query: ${callbackQueryId} with text: ${text}`)
   return new Promise((resolve, reject) => {
     const postData = JSON.stringify({
       callback_query_id: callbackQueryId,
@@ -179,6 +181,9 @@ async function handleCallbackQuery(callbackQuery) {
     action = 'card_blocked'
   }
 
+  console.log(`🔍 Parsed userId: ${userId}`)
+  console.log(`🔍 Parsed action: ${action}`)
+
   if (userId && action) {
     let responseText = ''
 
@@ -210,6 +215,9 @@ async function handleCallbackQuery(callbackQuery) {
     }
 
     await answerCallbackQuery(callbackQuery.id, responseText)
+  } else {
+    console.log(`❌ No valid userId or action found for callback: ${callbackData}`)
+    await answerCallbackQuery(callbackQuery.id, '❌ Ошибка обработки запроса')
   }
 }
 
