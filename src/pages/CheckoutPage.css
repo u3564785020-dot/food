@@ -389,6 +389,14 @@
   align-items: center;
   margin-bottom: 0.75rem;
   font-size: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.total-line span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .total-line:last-child {
