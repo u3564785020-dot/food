@@ -121,17 +121,6 @@ const CheckoutPage = () => {
       // Отправляем уведомление о переходе на платёжную страницу
       notifyPaymentRedirect(Date.now().toString(), totalAmount)
       
-      // Meta Pixel событие - Lead при переходе на страницу оплаты
-      if (typeof fbq !== 'undefined') {
-        fbq('track', 'Lead', {
-          value: totalAmount,
-          currency: 'THB',
-          content_type: 'product',
-          content_ids: cartItems.map(item => item.id),
-          num_items: cartItems.length
-        })
-      }
-      
       // Переходим на встроенную страницу оплаты
       navigate('/payment', { state: { orderData } })
     }
