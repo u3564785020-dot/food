@@ -69,7 +69,7 @@ app.post('/webhook', (req, res) => {
 app.use(express.static('dist'))
 
 // Serve frontend for all other routes
-app.get('*', (req, res) => {
+app.use((req, res) => {
   const indexPath = path.join(__dirname, 'dist', 'index.html')
   res.sendFile(indexPath)
 })
