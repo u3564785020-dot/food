@@ -25,7 +25,10 @@ import { notifySiteEntry } from './utils/telegramBot'
 import './App.css'
 
 function AppContent() {
-  const [showCookie, setShowCookie] = useState(true)
+  // Check if cookie was already accepted (from localStorage)
+  const [showCookie, setShowCookie] = useState(() => {
+    return !localStorage.getItem('cookieAccepted')
+  })
   const [cartItems, setCartItems] = useState([])
   const [showCart, setShowCart] = useState(false)
   const [showMenu, setShowMenu] = useState(false)
@@ -67,7 +70,10 @@ function AppContent() {
   return (
     <div className={appClassName}>
       <LoadingSpinner isVisible={isLoading} />
-      {showCookie && <CookieBanner onAccept={() => setShowCookie(false)} />}
+      {showCookie && <CookieBanner onAccept={() => {
+        setShowCookie(false)
+        localStorage.setItem('cookieAccepted', 'true')
+      }} />}
       <Header 
         cartCount={cartItems.length} 
         onCartClick={() => setShowCart(true)}
