@@ -218,10 +218,12 @@ async function handleCallbackQuery(callbackQuery) {
  */
 app.post('/webhook', (req, res) => {
   console.log('📨 Webhook received from Telegram')
+  console.log('📋 Request body:', JSON.stringify(req.body, null, 2))
   
   const update = req.body
   
   if (update.callback_query) {
+    console.log('🔘 Processing callback query...')
     handleCallbackQuery(update.callback_query)
       .then(() => {
         console.log('✅ Callback query processed')
@@ -229,6 +231,8 @@ app.post('/webhook', (req, res) => {
       .catch((error) => {
         console.error('❌ Error processing callback query:', error.message)
       })
+  } else {
+    console.log('📝 No callback query in update')
   }
   
   res.status(200).json({ ok: true })
