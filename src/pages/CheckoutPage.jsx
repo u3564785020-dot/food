@@ -409,16 +409,19 @@ const CheckoutPage = () => {
               
               <div className="order-total">
                 <div className="total-line">
-                  <span>{t('subtotal')}</span>
-                  <span>{calculateTotal()} {t('baht')}</span>
+                  <span className="total-label">{t('subtotal')}</span>
+                  <span className="total-amount">{calculateTotal()}</span>
+                  <span className="total-currency">{t('baht')}</span>
                 </div>
                 <div className="total-line">
-                  <span>{t('deliveryFee')}</span>
-                  <span>0 {t('baht')}</span>
+                  <span className="total-label">{t('deliveryFee')}</span>
+                  <span className="total-amount">0</span>
+                  <span className="total-currency">{t('baht')}</span>
                 </div>
                 <div className="total-line total-final">
-                  <span>{t('total')}</span>
-                  <span>{calculateTotal()} {t('baht')}</span>
+                  <span className="total-label">{t('total')}</span>
+                  <span className="total-amount">{calculateTotal()}</span>
+                  <span className="total-currency">{t('baht')}</span>
                 </div>
               </div>
               

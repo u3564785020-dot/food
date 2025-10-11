@@ -384,26 +384,34 @@
 }
 
 .total-line {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
   align-items: center;
   margin-bottom: 0.75rem;
   font-size: 16px;
   min-height: 24px;
   padding: 0.25rem 0;
+  gap: 0.5rem;
 }
 
-.total-line span:first-child {
-  flex: 1;
+.total-label {
   text-align: left;
   font-weight: 500;
+  color: var(--color-brown-dark);
 }
 
-.total-line span:last-child {
-  flex-shrink: 0;
+.total-amount {
   text-align: right;
   font-weight: 600;
   color: var(--color-brown-dark);
+  min-width: 40px;
+}
+
+.total-currency {
+  text-align: left;
+  font-weight: 600;
+  color: var(--color-brown-dark);
+  min-width: 30px;
 }
 
 .total-line:last-child {
