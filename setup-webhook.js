@@ -6,7 +6,7 @@ const https = require('https')
 
 // Конфигурация
 const BOT_TOKEN = '8406857793:AAGDQnLYrL78nWDrBxi1AS1kWTTVjxdUbpg'
-const WEBHOOK_URL = 'https://YOUR_RAILWAY_URL.railway.app/webhook' // Замените на ваш Railway URL
+const WEBHOOK_URL = 'burgerkingtai-production.up.railway.app' // Замените на ваш Railway URL
 
 /**
  * Установка webhook
