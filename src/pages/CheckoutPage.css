@@ -389,6 +389,19 @@
   align-items: center;
   margin-bottom: 0.75rem;
   font-size: 16px;
+  min-height: 24px;
+}
+
+.total-line span:first-child {
+  flex: 1;
+  margin-right: 10px;
+  white-space: nowrap;
+}
+
+.total-line span:last-child {
+  flex-shrink: 0;
+  white-space: nowrap;
+  font-weight: 600;
 }
 
 .total-line:last-child {
