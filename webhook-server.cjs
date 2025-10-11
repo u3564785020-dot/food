@@ -61,7 +61,7 @@ app.get('/health', (req, res) => {
 })
 
 // Serve frontend for all non-API routes
-app.get('/*', (req, res) => {
+app.use((req, res) => {
   const indexPath = path.join(__dirname, 'dist', 'index.html')
   console.log('📁 Serving frontend from:', indexPath)
   
