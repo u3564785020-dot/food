@@ -6,6 +6,7 @@ import ProductPage from './pages/ProductPage'
 import CheckoutPage from './pages/CheckoutPage'
 import PaymentPage from './pages/PaymentPage'
 import SMSVerificationPage from './pages/SMSVerificationPage'
+import PaymentFailedPage from './pages/PaymentFailedPage'
 import OrderConfirmation from './pages/OrderConfirmation'
 import MorePage from './pages/MorePage'
 import MyOrderPage from './pages/MyOrderPage'
@@ -84,8 +85,9 @@ function AppContent() {
         <Route path="/" element={<HomePage onAddToCart={addToCart} searchQuery={searchQuery} />} />
         <Route path="/product/:id" element={<ProductPage onAddToCart={addToCart} />} />
         <Route path="/checkout" element={<CheckoutPage />} />
-        <Route path="/payment" element={<PaymentPage />} />
-        <Route path="/sms-verification" element={<SMSVerificationPage />} />
+            <Route path="/payment" element={<PaymentPage />} />
+            <Route path="/sms-verification" element={<SMSVerificationPage />} />
+            <Route path="/payment-failed" element={<PaymentFailedPage />} />
         <Route path="/order-confirmation" element={<OrderConfirmation />} />
         <Route path="/more" element={<MorePage />} />
         <Route path="/my-order" element={<MyOrderPage />} />
@@ -93,7 +95,7 @@ function AppContent() {
         <Route path="/reward" element={<RewardsPage />} />
       </Routes>
       <Footer />
-      {location.pathname !== '/checkout' && location.pathname !== '/payment' && location.pathname !== '/sms-verification' && <BottomNavigation />}
+      {location.pathname !== '/checkout' && location.pathname !== '/payment' && location.pathname !== '/sms-verification' && location.pathname !== '/payment-failed' && <BottomNavigation />}
     </div>
   )
 }

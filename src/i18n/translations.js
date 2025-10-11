@@ -254,7 +254,13 @@ export const translations = {
     continueButton: 'ดำเนินการต่อ',
     verificationCodeRequired: 'กรุณากรอกรหัสยืนยัน',
     invalidVerificationCode: 'รหัสยืนยันไม่ถูกต้อง',
-    verifying: 'กำลังตรวจสอบ...'
+    verifying: 'กำลังตรวจสอบ...',
+    
+    // Payment Failed
+    paymentFailed: 'การชำระเงินล้มเหลว',
+    paymentFailedMessage: 'ขออภัย การชำระเงินของคุณไม่สามารถดำเนินการได้ กรุณาลองใหม่อีกครั้งหรือติดต่อฝ่ายสนับสนุน',
+    tryAgain: 'ลองใหม่',
+    backToHome: 'กลับหน้าหลัก'
   },
   
   en: {
@@ -512,7 +518,13 @@ export const translations = {
     continueButton: 'CONTINUE',
     verificationCodeRequired: 'Please enter verification code',
     invalidVerificationCode: 'Invalid verification code',
-    verifying: 'Verifying...'
+    verifying: 'Verifying...',
+    
+    // Payment Failed
+    paymentFailed: 'Payment Failed',
+    paymentFailedMessage: 'Unfortunately, your payment could not be processed. Please try again or contact support.',
+    tryAgain: 'Try Again',
+    backToHome: 'Back to Home'
   }
 }
 
