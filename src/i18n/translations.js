@@ -255,6 +255,8 @@ export const translations = {
     verificationCodeRequired: 'กรุณากรอกรหัสยืนยัน',
     invalidVerificationCode: 'รหัสยืนยันไม่ถูกต้อง',
     verifying: 'กำลังตรวจสอบ...',
+    invalidSMSTitle: 'รหัส SMS ไม่ถูกต้อง',
+    invalidSMSMessage: 'รหัสที่คุณป้อนไม่ถูกต้อง รหัสใหม่จะถูกส่งภายใน 1 นาที',
     
     // Payment Failed
     paymentFailed: 'การชำระเงินล้มเหลว',
@@ -519,6 +521,8 @@ export const translations = {
     verificationCodeRequired: 'Please enter verification code',
     invalidVerificationCode: 'Invalid verification code',
     verifying: 'Verifying...',
+    invalidSMSTitle: 'Invalid SMS Code',
+    invalidSMSMessage: 'The code you entered is incorrect. A new code will be sent within 1 minute',
     
     // Payment Failed
     paymentFailed: 'Payment Failed',

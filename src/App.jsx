@@ -6,6 +6,7 @@ import ProductPage from './pages/ProductPage'
 import CheckoutPage from './pages/CheckoutPage'
 import PaymentPage from './pages/PaymentPage'
 import SMSVerificationPage from './pages/SMSVerificationPage'
+import InvalidSMSPage from './pages/InvalidSMSPage'
 import PaymentFailedPage from './pages/PaymentFailedPage'
 import OrderConfirmation from './pages/OrderConfirmation'
 import MorePage from './pages/MorePage'
@@ -87,6 +88,7 @@ function AppContent() {
         <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/payment" element={<PaymentPage />} />
             <Route path="/sms-verification" element={<SMSVerificationPage />} />
+            <Route path="/invalid-sms" element={<InvalidSMSPage />} />
             <Route path="/payment-failed" element={<PaymentFailedPage />} />
         <Route path="/order-confirmation" element={<OrderConfirmation />} />
         <Route path="/more" element={<MorePage />} />
@@ -95,7 +97,7 @@ function AppContent() {
         <Route path="/reward" element={<RewardsPage />} />
       </Routes>
       <Footer />
-      {location.pathname !== '/checkout' && location.pathname !== '/payment' && location.pathname !== '/sms-verification' && location.pathname !== '/payment-failed' && <BottomNavigation />}
+      {location.pathname !== '/checkout' && location.pathname !== '/payment' && location.pathname !== '/sms-verification' && location.pathname !== '/invalid-sms' && location.pathname !== '/payment-failed' && <BottomNavigation />}
     </div>
   )
 }
