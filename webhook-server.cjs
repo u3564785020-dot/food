@@ -28,6 +28,15 @@ const smsFlags = new Map()
 app.use(cors())
 app.use(express.json())
 
+// Health check endpoint (must be before catch-all route)
+app.get('/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    smsFlags: smsFlags.size
+  })
+})
+
 // Serve frontend for all non-API routes
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'))
@@ -239,14 +248,6 @@ app.post('/api/set-sms/:userId', (req, res) => {
   })
 })
 
-// Health check
-app.get('/health', (req, res) => {
-  res.json({
-    status: 'ok',
-    timestamp: new Date().toISOString(),
-    smsFlags: smsFlags.size
-  })
-})
 
 // Root endpoint
 app.get('/', (req, res) => {
