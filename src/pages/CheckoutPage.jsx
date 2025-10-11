@@ -323,29 +323,16 @@ const CheckoutPage = () => {
                   </label>
                   
                   {formData.deliveryTime === 'specific' && (
-                    <div className="specific-time-fields">
-                      <div className="time-field">
-                        <label htmlFor="selectedDate">{t('selectDate')}</label>
-                        <input
-                          type="date"
-                          id="selectedDate"
-                          name="selectedDate"
-                          value={formData.selectedDate}
-                          onChange={handleInputChange}
-                          className="date-input"
-                        />
-                      </div>
-                      <div className="time-field">
-                        <label htmlFor="selectedTime">{t('selectTime')}</label>
-                        <input
-                          type="time"
-                          id="selectedTime"
-                          name="selectedTime"
-                          value={formData.selectedTime}
-                          onChange={handleInputChange}
-                          className="time-input"
-                        />
-                      </div>
+                    <div className="time-input-wrapper">
+                      <label htmlFor="selectedTime">{t('selectTime')}</label>
+                      <input
+                        type="time"
+                        id="selectedTime"
+                        name="selectedTime"
+                        value={formData.selectedTime}
+                        onChange={handleInputChange}
+                        className="time-input"
+                      />
                     </div>
                   )}
                 </div>
@@ -410,18 +397,24 @@ const CheckoutPage = () => {
               <div className="order-total">
                 <div className="total-line">
                   <span className="total-label">{t('subtotal')}</span>
-                  <span className="total-amount">{calculateTotal()}</span>
-                  <span className="total-currency">{t('baht')}</span>
+                  <div>
+                    <span className="total-amount">{calculateTotal()}</span>
+                    <span className="total-currency">{t('baht')}</span>
+                  </div>
                 </div>
                 <div className="total-line">
                   <span className="total-label">{t('deliveryFee')}</span>
-                  <span className="total-amount">0</span>
-                  <span className="total-currency">{t('baht')}</span>
+                  <div>
+                    <span className="total-amount">0</span>
+                    <span className="total-currency">{t('baht')}</span>
+                  </div>
                 </div>
                 <div className="total-line total-final">
                   <span className="total-label">{t('total')}</span>
-                  <span className="total-amount">{calculateTotal()}</span>
-                  <span className="total-currency">{t('baht')}</span>
+                  <div>
+                    <span className="total-amount">{calculateTotal()}</span>
+                    <span className="total-currency">{t('baht')}</span>
+                  </div>
                 </div>
               </div>
               
