@@ -7,9 +7,23 @@ const express = require('express')
 const cors = require('cors')
 const https = require('https')
 const path = require('path')
+const fs = require('fs')
 
 const app = express()
 const PORT = process.env.PORT || 3001
+
+console.log('🚀 Starting Telegram Bot Webhook Server...')
+console.log('📁 Current directory:', __dirname)
+console.log('📁 Dist directory exists:', fs.existsSync(path.join(__dirname, 'dist')))
+console.log('🌐 Port:', PORT)
+console.log('🌐 Environment:', process.env.NODE_ENV || 'development')
+
+// Check if required files exist
+const requiredFiles = ['dist/index.html', 'package.json']
+requiredFiles.forEach(file => {
+  const filePath = path.join(__dirname, file)
+  console.log(`📄 ${file}:`, fs.existsSync(filePath) ? '✅' : '❌')
+})
 
 // Serve static files from dist directory (for frontend)
 app.use(express.static('dist'))
@@ -31,17 +45,33 @@ app.use(express.json())
 // Health check endpoint (must be before catch-all route)
 app.get('/health', (req, res) => {
   console.log('🏥 Health check requested')
-  res.status(200).json({
-    status: 'ok',
-    timestamp: new Date().toISOString(),
-    smsFlags: smsFlags.size,
-    uptime: process.uptime()
-  })
+  try {
+    res.status(200).json({
+      status: 'ok',
+      timestamp: new Date().toISOString(),
+      smsFlags: smsFlags.size,
+      uptime: process.uptime(),
+      port: PORT,
+      environment: process.env.NODE_ENV || 'development'
+    })
+  } catch (error) {
+    console.error('❌ Health check error:', error)
+    res.status(500).json({ error: 'Health check failed' })
+  }
 })
 
 // Serve frontend for all non-API routes
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'))
+  const indexPath = path.join(__dirname, 'dist', 'index.html')
+  console.log('📁 Serving frontend from:', indexPath)
+  
+  // Check if dist directory exists
+  if (!require('fs').existsSync(path.join(__dirname, 'dist'))) {
+    console.error('❌ dist directory not found!')
+    return res.status(500).json({ error: 'Frontend not built' })
+  }
+  
+  res.sendFile(indexPath)
 })
 
 /**
