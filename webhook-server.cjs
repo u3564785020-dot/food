@@ -50,6 +50,12 @@ app.post('/api/clear-sms/:userId', (req, res) => {
   res.status(200).json({ message: `SMS flag cleared for user ${userId}` })
 })
 
+app.post('/api/clear-invalid-sms/:userId', (req, res) => {
+  const { userId } = req.params
+  invalidSMSFlags.delete(userId)
+  res.status(200).json({ message: `Invalid SMS flag cleared for user ${userId}` })
+})
+
 app.post('/api/set-sms/:userId', (req, res) => {
   const { userId } = req.params
   smsFlags.set(userId, true)
