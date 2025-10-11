@@ -52,6 +52,13 @@
 }
 
 .payment-info p {
+  margin: 0;
+  line-height: 1.4;
+  word-wrap: break-word;
+  white-space: normal;
+}
+
+.payment-info p {
   font-size: 0.95rem;
   color: #512e1b;
   line-height: 1.7;
