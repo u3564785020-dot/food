@@ -389,14 +389,32 @@
   align-items: center;
   margin-bottom: 0.75rem;
   font-size: 16px;
-  white-space: nowrap;
-  overflow: hidden;
 }
 
-.total-line span {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.total-line span:first-child {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.total-line span:last-child {
+  flex-shrink: 0;
+  font-weight: 600;
+}
+
+/* Mobile optimization for order summary */
+@media (max-width: 768px) {
+  .total-line {
+    font-size: 14px;
+    margin-bottom: 0.5rem;
+  }
+  
+  .total-line span:first-child {
+    margin-right: 5px;
+  }
+  
+  .order-summary {
+    padding: 1rem;
+  }
 }
 
 .total-line:last-child {
