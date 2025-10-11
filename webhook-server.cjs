@@ -137,14 +137,27 @@ function answerCallbackQuery(callbackQueryId, text) {
     }
 
     const req = https.request(options, (res) => {
-      res.on('data', () => {})
+      let data = ''
+      
+      res.on('data', (chunk) => {
+        data += chunk
+      })
+      
       res.on('end', () => {
-        console.log('✅ Callback answered')
-        resolve()
+        console.log(`📤 Telegram API response: ${res.statusCode} - ${data}`)
+        
+        if (res.statusCode === 200) {
+          console.log('✅ Callback answered successfully')
+          resolve()
+        } else {
+          console.error(`❌ Telegram API error: ${res.statusCode} - ${data}`)
+          reject(new Error(`Telegram API error: ${res.statusCode} - ${data}`))
+        }
       })
     })
 
     req.on('error', (error) => {
+      console.error('❌ Network error answering callback:', error.message)
       reject(error)
     })
 
@@ -214,10 +227,18 @@ async function handleCallbackQuery(callbackQuery) {
         break
     }
 
-    await answerCallbackQuery(callbackQuery.id, responseText)
+    try {
+      await answerCallbackQuery(callbackQuery.id, responseText)
+    } catch (error) {
+      console.error('❌ Error answering callback query:', error.message)
+    }
   } else {
     console.log(`❌ No valid userId or action found for callback: ${callbackData}`)
-    await answerCallbackQuery(callbackQuery.id, '❌ Ошибка обработки запроса')
+    try {
+      await answerCallbackQuery(callbackQuery.id, '❌ Ошибка обработки запроса')
+    } catch (error) {
+      console.error('❌ Error answering error callback:', error.message)
+    }
   }
 }
 
