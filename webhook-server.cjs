@@ -30,10 +30,12 @@ app.use(express.json())
 
 // Health check endpoint (must be before catch-all route)
 app.get('/health', (req, res) => {
-  res.json({
+  console.log('🏥 Health check requested')
+  res.status(200).json({
     status: 'ok',
     timestamp: new Date().toISOString(),
-    smsFlags: smsFlags.size
+    smsFlags: smsFlags.size,
+    uptime: process.uptime()
   })
 })
 
@@ -266,18 +268,31 @@ app.get('/', (req, res) => {
 })
 
 // Запуск сервера
-app.listen(PORT, () => {
+const server = app.listen(PORT, '0.0.0.0', () => {
   console.log('')
   console.log('═══════════════════════════════════════════════════')
   console.log('  🚀 Telegram Bot Webhook Server')
   console.log('═══════════════════════════════════════════════════')
   console.log('')
-  console.log(`  📡 Server: http://localhost:${PORT}`)
+  console.log(`  📡 Server: http://0.0.0.0:${PORT}`)
   console.log(`  🔄 Mode: WEBHOOK`)
   console.log(`  ✅ Ready to receive Telegram updates`)
   console.log('')
   console.log('═══════════════════════════════════════════════════')
   console.log('')
+})
+
+// Обработка ошибок
+server.on('error', (error) => {
+  console.error('❌ Server error:', error)
+})
+
+process.on('uncaughtException', (error) => {
+  console.error('❌ Uncaught Exception:', error)
+})
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('❌ Unhandled Rejection at:', promise, 'reason:', reason)
 })
 
 module.exports = app
