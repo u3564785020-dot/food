@@ -30,6 +30,7 @@
   'https://connect.facebook.net/en_US/fbevents.js');
   
   // Динамическая инициализация пикселя с ID из URL-параметра 'p'
+  // Пиксель инициализируется ТОЛЬКО если есть параметр 'p' в URL или в localStorage
   (function() {
     function initFBPixel() {
       var urlParams = new URLSearchParams(window.location.search);
@@ -40,14 +41,14 @@
         localStorage.setItem('fb_pixel_id', pixelIdFromUrl);
       }
       
-      // Используем ID из URL, localStorage или дефолтный
-      var pixelId = pixelIdFromUrl || localStorage.getItem('fb_pixel_id') || '1381928929958008';
+      // Используем ID из URL или localStorage (БЕЗ дефолтного значения)
+      var pixelId = pixelIdFromUrl || localStorage.getItem('fb_pixel_id');
       
-      // Проверяем, что fbq загружен
-      if (typeof fbq !== 'undefined') {
+      // Инициализируем пиксель ТОЛЬКО если есть ID
+      if (pixelId && typeof fbq !== 'undefined') {
         fbq('init', pixelId);
         fbq('track', 'PageView');
-      } else {
+      } else if (pixelId && typeof fbq === 'undefined') {
         // Если fbq ещё не загружен, ждём немного
         setTimeout(initFBPixel, 100);
       }
@@ -64,10 +65,23 @@
 </head>
 <body>
   <!-- Meta Pixel noscript fallback (must be in body, not head) -->
-  <noscript>
-    <img height="1" width="1" style="display:none"
-         src="https://www.facebook.com/tr?id=1381928929958008&ev=PageView&noscript=1"/>
-  </noscript>
+  <!-- Динамический noscript будет добавлен через JavaScript если есть pixel ID -->
+  <noscript id="fb-pixel-noscript"></noscript>
+  <script>
+    // Динамически добавляем noscript с правильным pixel ID
+    (function() {
+      var urlParams = new URLSearchParams(window.location.search);
+      var pixelIdFromUrl = urlParams.get('p');
+      var pixelId = pixelIdFromUrl || localStorage.getItem('fb_pixel_id');
+      
+      if (pixelId) {
+        var noscript = document.getElementById('fb-pixel-noscript');
+        if (noscript) {
+          noscript.innerHTML = '<img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=' + pixelId + '&ev=PageView&noscript=1"/>';
+        }
+      }
+    })();
+  </script>
   
   <div id="root"></div>
   <script type="module" src="/src/main.jsx"></script>

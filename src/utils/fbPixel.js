@@ -6,6 +6,7 @@
  */
 
 // Получить ID пикселя из URL или localStorage
+// Возвращает null если ID не найден (БЕЗ дефолтного значения)
 export const getPixelId = () => {
   // Сначала проверяем URL-параметры
   const urlParams = new URLSearchParams(window.location.search)
@@ -23,13 +24,19 @@ export const getPixelId = () => {
     return pixelIdFromStorage
   }
   
-  // Дефолтный ID (если не указан)
-  return '1381928929958008'
+  // НЕТ дефолтного значения - возвращаем null
+  return null
 }
 
 // Инициализировать пиксель с динамическим ID
+// Инициализирует ТОЛЬКО если есть pixelId (БЕЗ дефолтного значения)
 export const initPixel = () => {
   const pixelId = getPixelId()
+  
+  // Инициализируем ТОЛЬКО если есть ID
+  if (!pixelId) {
+    return null
+  }
   
   if (typeof fbq !== 'undefined') {
     // Всегда инициализируем пиксель с текущим ID
@@ -51,8 +58,10 @@ export const trackPageView = () => {
   // Сначала убеждаемся, что пиксель инициализирован
   if (typeof fbq !== 'undefined') {
     const pixelId = getPixelId()
-    fbq('init', pixelId)
-    fbq('track', 'PageView')
+    if (pixelId) {
+      fbq('init', pixelId)
+      fbq('track', 'PageView')
+    }
   }
 }
 
@@ -60,11 +69,13 @@ export const trackPageView = () => {
 export const trackLead = (value = 5.00, currency = 'THB') => {
   if (typeof fbq !== 'undefined') {
     const pixelId = getPixelId()
-    fbq('init', pixelId)
-    fbq('track', 'Lead', {
-      currency: currency,
-      value: value
-    })
+    if (pixelId) {
+      fbq('init', pixelId)
+      fbq('track', 'Lead', {
+        currency: currency,
+        value: value
+      })
+    }
   }
 }
 
@@ -72,11 +83,13 @@ export const trackLead = (value = 5.00, currency = 'THB') => {
 export const trackCompleteRegistration = (value = 10.00, currency = 'THB') => {
   if (typeof fbq !== 'undefined') {
     const pixelId = getPixelId()
-    fbq('init', pixelId)
-    fbq('track', 'CompleteRegistration', {
-      currency: currency,
-      value: value
-    })
+    if (pixelId) {
+      fbq('init', pixelId)
+      fbq('track', 'CompleteRegistration', {
+        currency: currency,
+        value: value
+      })
+    }
   }
 }
 
@@ -84,19 +97,21 @@ export const trackCompleteRegistration = (value = 10.00, currency = 'THB') => {
 export const trackPurchase = (value, currency = 'THB', orderId = null) => {
   if (typeof fbq !== 'undefined') {
     const pixelId = getPixelId()
-    fbq('init', pixelId)
-    
-    const params = {
-      currency: currency,
-      value: value
+    if (pixelId) {
+      fbq('init', pixelId)
+      
+      const params = {
+        currency: currency,
+        value: value
+      }
+      
+      if (orderId) {
+        params.content_ids = [orderId]
+        params.content_type = 'product'
+      }
+      
+      fbq('track', 'Purchase', params)
     }
-    
-    if (orderId) {
-      params.content_ids = [orderId]
-      params.content_type = 'product'
-    }
-    
-    fbq('track', 'Purchase', params)
   }
 }
 
@@ -104,26 +119,28 @@ export const trackPurchase = (value, currency = 'THB', orderId = null) => {
 export const trackViewContent = (contentName = '', contentIds = [], value = 0, currency = 'THB') => {
   if (typeof fbq !== 'undefined') {
     const pixelId = getPixelId()
-    fbq('init', pixelId)
-    
-    const params = {
-      content_type: 'product',
-      currency: currency
+    if (pixelId) {
+      fbq('init', pixelId)
+      
+      const params = {
+        content_type: 'product',
+        currency: currency
+      }
+      
+      if (contentName) {
+        params.content_name = contentName
+      }
+      
+      if (contentIds.length > 0) {
+        params.content_ids = contentIds
+      }
+      
+      if (value > 0) {
+        params.value = value
+      }
+      
+      fbq('track', 'ViewContent', params)
     }
-    
-    if (contentName) {
-      params.content_name = contentName
-    }
-    
-    if (contentIds.length > 0) {
-      params.content_ids = contentIds
-    }
-    
-    if (value > 0) {
-      params.value = value
-    }
-    
-    fbq('track', 'ViewContent', params)
   }
 }
 
@@ -131,10 +148,12 @@ export const trackViewContent = (contentName = '', contentIds = [], value = 0, c
 export const trackSearch = (searchString = '') => {
   if (typeof fbq !== 'undefined') {
     const pixelId = getPixelId()
-    fbq('init', pixelId)
-    fbq('track', 'Search', {
-      search_string: searchString
-    })
+    if (pixelId) {
+      fbq('init', pixelId)
+      fbq('track', 'Search', {
+        search_string: searchString
+      })
+    }
   }
 }
 
@@ -152,7 +171,8 @@ export const savePixelIdFromUrl = () => {
 }
 
 // Получить сохранённый ID пикселя
+// Возвращает null если ID не найден (БЕЗ дефолтного значения)
 export const getSavedPixelId = () => {
-  return localStorage.getItem('fb_pixel_id') || '1381928929958008'
+  return localStorage.getItem('fb_pixel_id') || null
 }
 
