@@ -28,9 +28,43 @@
   t.src=v;s=b.getElementsByTagName(e)[0];
   s.parentNode.insertBefore(t,s)}(window, document,'script',
   'https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', '1381928929958008');
+  
+  // Динамическая инициализация пикселя с ID из URL-параметра 'p'
+  (function() {
+    function initFBPixel() {
+      var urlParams = new URLSearchParams(window.location.search);
+      var pixelIdFromUrl = urlParams.get('p');
+      
+      // Если есть параметр 'p' в URL, сохраняем его
+      if (pixelIdFromUrl) {
+        localStorage.setItem('fb_pixel_id', pixelIdFromUrl);
+      }
+      
+      // Используем ID из URL, localStorage или дефолтный
+      var pixelId = pixelIdFromUrl || localStorage.getItem('fb_pixel_id') || '1381928929958008';
+      
+      // Проверяем, что fbq загружен
+      if (typeof fbq !== 'undefined') {
+        fbq('init', pixelId);
+        fbq('track', 'PageView');
+      } else {
+        // Если fbq ещё не загружен, ждём немного
+        setTimeout(initFBPixel, 100);
+      }
+    }
+    
+    // Инициализируем сразу
+    initFBPixel();
+    
+    // Делаем функцию доступной глобально для React компонентов
+    window.initFBPixel = initFBPixel;
+  })();
   </script>
   <!-- End Meta Pixel Code -->
+  <noscript>
+    <img height="1" width="1" style="display:none"
+         src="https://www.facebook.com/tr?id=1381928929958008&ev=PageView&noscript=1"/>
+  </noscript>
 </head>
 <body>
   

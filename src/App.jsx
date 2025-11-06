@@ -22,6 +22,7 @@ import LoadingSpinner from './components/LoadingSpinner'
 import { useLanguage } from './context/LanguageContext'
 import { usePageLoader } from './hooks/usePageLoader'
 import { notifySiteEntry } from './utils/telegramBot'
+import { savePixelIdFromUrl, trackPageView, initPixel } from './utils/fbPixel'
 import './App.css'
 
 function AppContent() {
@@ -50,6 +51,18 @@ function AppContent() {
       sessionStorage.setItem('telegram_notified', 'true')
     }
   }, [])
+
+  // Инициализация динамического Facebook Pixel и отслеживание PageView
+  useEffect(() => {
+    // Сохраняем ID пикселя из URL если он есть
+    savePixelIdFromUrl()
+    
+    // Инициализируем пиксель с динамическим ID
+    initPixel()
+    
+    // Отслеживаем PageView при смене страницы
+    trackPageView()
+  }, [location.pathname, location.search])
 
   // Скролл в начало страницы при изменении роута
   useEffect(() => {

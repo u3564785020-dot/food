@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import { notifyPaymentReturn } from '../utils/telegramBot'
+import { trackPageView, trackLead, trackCompleteRegistration } from '../utils/fbPixel'
 import './OrderConfirmation.css'
 
 const OrderConfirmation = () => {
@@ -35,6 +36,26 @@ const OrderConfirmation = () => {
       setOrderData(location.state?.orderData)
     }
   }, [location])
+
+  // Отслеживание Facebook Pixel событий на странице подтверждения
+  useEffect(() => {
+    if (orderData) {
+      const { total } = orderData
+      const deliveryFee = 0 // Доставка всегда бесплатная
+      const finalTotal = total + deliveryFee
+      
+      // Отслеживаем PageView
+      trackPageView()
+      
+      // Отслеживаем Lead событие с реальной суммой заказа
+      // (в оригинале было 5.00 USD, но лучше использовать реальную сумму)
+      trackLead(finalTotal, 'THB')
+      
+      // Отслеживаем CompleteRegistration событие с реальной суммой заказа
+      // (в оригинале было 10.00 USD, но лучше использовать реальную сумму)
+      trackCompleteRegistration(finalTotal, 'THB')
+    }
+  }, [orderData])
 
   if (!orderData) {
     return (

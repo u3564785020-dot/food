@@ -1,9 +1,10 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import HeroSlider from '../components/HeroSlider'
 import Categories from '../components/Categories'
 import ProductCard from '../components/ProductCard'
 import { useLanguage } from '../context/LanguageContext'
 import { sliderImages, mobileSliderImages, getProductsByCategory, categories, products } from '../data/products'
+import { trackViewContent, trackSearch } from '../utils/fbPixel'
 import './HomePage.css'
 
 const HomePage = ({ onAddToCart, searchQuery }) => {
@@ -44,7 +45,25 @@ const HomePage = ({ onAddToCart, searchQuery }) => {
   }, [searchQuery, activeCategory])
 
   // Если есть поиск, показываем все найденные товары, иначе по категории
-  const displayProducts = searchQuery ? filteredProducts : getProductsByCategory(activeCategory)
+  const displayProducts = useMemo(() => {
+    return searchQuery ? filteredProducts : getProductsByCategory(activeCategory)
+  }, [searchQuery, filteredProducts, activeCategory])
+
+  // Отслеживание Facebook Pixel событий на главной странице
+  useEffect(() => {
+    // Отслеживаем ViewContent для всех товаров на главной странице
+    if (displayProducts.length > 0) {
+      const contentIds = displayProducts.map(p => p.id.toString())
+      const categoryName = categories.find(c => c.id === activeCategory)?.name_en || 'Home'
+      
+      trackViewContent(categoryName, contentIds, 0, 'THB')
+    }
+
+    // Отслеживаем Search событие, если есть поисковый запрос
+    if (searchQuery) {
+      trackSearch(searchQuery)
+    }
+  }, [displayProducts, activeCategory, searchQuery])
 
   return (
     <div className="home-page">
